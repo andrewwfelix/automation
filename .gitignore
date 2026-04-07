@@ -1,0 +1,55 @@
+# ============================================
+# Secrets & environment
+# ============================================
+.env
+config/open_router_key.txt
+config/config.json        # if it contains real keys (use .example instead)
+# If you keep any other secrets file:
+open_router_key.txt
+movies.cfg
+
+# ============================================
+# Generated data (large, temporary, or output)
+# ============================================
+data/input/
+data/output/
+data/failures/
+analytics/
+temp/
+logs/
+*.log
+
+# ============================================
+# Node.js
+# ============================================
+node_modules/
+package-lock.json   # optional – commit if you want exact versions
+
+# ============================================
+# OS & editor files
+# ============================================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.suo
+*.user
+
+# ============================================
+# Legacy / archive – if you want them excluded from Git
+# (uncomment if you do NOT want to commit archive/ contents)
+# archive/
+# batch/               # batch might contain .bat scripts you want to keep – probably commit
+# utilities/           # commit your utility scripts
+
+# ============================================
+# Backup / scratch files
+# ============================================
+*.bak
+*.orig
+*.old
+*.backup
+debug.txt

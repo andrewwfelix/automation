@@ -1,0 +1,341 @@
+===============================================================================
+BOOKSVERSUSMOVIES.COM - BATCH HTML REVISION TOOL
+===============================================================================
+
+This tool automatically revises existing HTML comparison pages. It reads .html
+files from an "input/" folder, sends each to an LLM (via OpenRouter) with a
+precise revision prompt, and writes the corrected files to an "output/" folder.
+Files that fail are moved to "output/failures/" for manual inspection.
+
+===============================================================================
+1.0 BUSINESS OBJECTIVES
+===============================================================================
+
+The revisions are designed to achieve three business goals:
+
+1.1 Increase reader trust and reduce complaints
+    - Add a clear, consistent spoiler warning before any plot discussion.
+    - Readers appreciate being warned about spoilers, which reduces negative
+      feedback and increases return visits.
+
+1.2 Improve affiliate disclosure transparency
+    - Change "Buy the Book" buttons to "Buy the Book (affiliate)".
+    - This complies with Amazon's best practices for affiliate disclosure.
+    - Clearer labeling may increase click-through rates.
+
+1.3 Maintain consistent quality across all pages
+    - Ensure every comparison follows the same structure.
+    - A consistent site feels more professional and trustworthy.
+    - Automated revision guarantees uniformity across hundreds of pages.
+
+===============================================================================
+2.0 ASSUMED FOLDER STRUCTURE
+===============================================================================
+
+Place the script and its supporting files in a directory structured as follows:
+
+your-project-root/
+|
++-- revise-batch.js          # Main revision script (no CSV dependency)
++-- revise_prompt.txt        # Instructions for the LLM (see section 4.0)
++-- movies.cfg               # Configuration file (API key, model, etc.)
++-- input/                   # Place existing .html files here
+|   +-- about-a-boy.html
+|   +-- jane-eyre.html
+|   +-- ... (any number of .html files)
++-- output/                  # Successfully revised files go here
+|   +-- failures/            # Original files that caused errors (preserved)
++-- revise-batch.log         # Detailed log file (auto-created)
++-- README.txt               # This file
+
+IMPORTANT: The script does NOT rely on a CSV or spreadsheet. It processes every
+.html file found in the "input/" folder.
+
+===============================================================================
+3.0 HOW THE SCRIPT WORKS
+===============================================================================
+
+3.1 Step-by-step execution:
+
+    a) You place existing HTML files (e.g., about-a-boy.html) into "input/".
+    b) The script reads each file and sends its full content to an LLM via
+       OpenRouter, together with the revision prompt (section 4.0).
+    c) The LLM returns a corrected HTML file with the requested changes.
+    d) The revised HTML is saved to "output/" with the same filename.
+    e) If an error occurs (API failure, invalid response, timeout), the
+       ORIGINAL file is copied to "output/failures/" and the error is logged.
+       The script continues with the next file.
+
+3.2 Logging:
+    Every action is recorded in "revise-batch.log" with timestamps. This
+    includes success confirmations, error messages, and API response details.
+
+3.3 Idempotency note:
+    The script does not automatically prevent duplicate changes. If you run it
+    twice on the same files, the revision prompt may add a second spoiler
+    warning. To avoid this, either run once, or modify the prompt to check for
+    existing elements (see section 8.0).
+
+===============================================================================
+4.0 REVISION PROMPT (revise_prompt.txt)
+===============================================================================
+
+Create a file named "revise_prompt.txt" in the same directory as the script.
+Copy the following text exactly. It tells the LLM what to change.
+
+--- BEGIN PROMPT ---
+BUSINESS OBJECTIVES FOR THIS REVISION:
+- Increase reader trust by clearly marking spoilers before they appear.
+- Improve affiliate disclosure transparency – add "(affiliate)" to the book button.
+- Maintain consistent site quality across all comparison pages.
+
+EXACT CHANGES TO APPLY TO THE PROVIDED HTML FILE:
+
+1. ADD SPOILER WARNING
+   - Locate the <div class="body-text"> element.
+   - Inside it, immediately after the opening <div class="body-text"> tag and before any <h2> heading, insert:
+     <div class="spoiler-warning" style="background: #f0ebe0; border-left: 4px solid #c8973a; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #4a4540;">
+       ⚠️ <strong>Contains spoilers</strong> – We discuss plot details and the ending. If you haven't read the book or seen the film yet, you may want to do that first.
+     </div>
+   - If the page uses "series" or "show" instead of "film", adjust the wording accordingly.
+
+2. UPDATE AFFILIATE BUTTON TEXT
+   - Find the <a> element with class "buy-btn" inside .panel-book.
+   - Change its text from "Buy the Book →" or "Buy the Book" to "Buy the Book (affiliate) →".
+   - Keep all attributes (href, target, rel) unchanged.
+
+3. (OPTIONAL) VERIFY VERDICT BADGE
+   - Check the <span class="verdict-badge ..."> inside .meta-strip.
+   - Ensure the class matches the verdict text:
+        "Book Wins" → class contains "verdict-book"
+        "Movie Wins" → class contains "verdict-film"
+        "Too Close to Call" → class contains "verdict-tie"
+   - If incorrect, update the class. Do not change the verdict text itself.
+
+4. PRESERVE EVERYTHING ELSE
+   - Do not change any other text, structure, classes, or formatting.
+   - Keep the <head>, meta tags, schema, and footer exactly as they are.
+
+Return the complete, corrected HTML file.
+--- END PROMPT ---
+
+===============================================================================
+5.0 CONFIGURATION FILE (movies.cfg)
+===============================================================================
+
+Create a file named "movies.cfg" in the same directory as the script. Below is
+a complete example with all available options.
+
+--- BEGIN movies.cfg ---
+# OpenRouter API key (required – get from https://openrouter.ai/keys)
+OPENROUTER_API_KEY=sk-or-v1-...
+
+# LLM model – choose one of the recommended models (see section 5.1)
+MODEL=claude-3-haiku-20240307
+
+# Path to the revision prompt file (relative to script directory)
+REVISE_PROMPT_PATH=revise_prompt.txt
+
+# Optional: timeout in seconds (default 120)
+TIMEOUT_SECONDS=60
+
+# Optional: max output tokens (default 8000)
+MAX_TOKENS=8000
+
+# Optional: site URL for OpenRouter referer header
+SITE_URL=https://booksversusmovies.com
+--- END movies.cfg ---
+
+5.1 Recommended models for this task (cost‑effective)
+
+    Model name                      Approx. cost per 200 pages   Notes
+    ------------------------------  ---------------------------  --------------------------
+    claude-3-haiku-20240307         ~$0.30                       Best value, very fast
+    gemini-1.5-flash                ~$0.37                       High throughput
+    gpt-4o-mini                     ~$0.45                       Reliable fallback
+    deepseek-v3.2                   ~$1.40                       Excellent coding ability
+
+    All of these models are more than sufficient for simple HTML restructuring.
+
+===============================================================================
+6.0 USAGE INSTRUCTIONS
+===============================================================================
+
+6.1 Prerequisites
+
+    - Install Node.js (if not already installed).
+    - Install the axios library once:
+        npm install axios
+
+6.2 Prepare your files
+
+    - Place all existing .html comparison pages into the "input/" folder.
+    - Ensure "movies.cfg" and "revise_prompt.txt" are present in the same
+      directory as "revise-batch.js".
+
+6.3 Dry run (preview without API calls)
+
+    Run the following command to see which files would be processed and where
+    they would be written, without actually calling the LLM API:
+
+        node revise-batch.js --dry-run
+
+6.4 Execute the revision
+
+    Run the script to process all files in "input/":
+
+        node revise-batch.js
+
+    Progress and any errors are printed to the console and also logged to
+    "revise-batch.log".
+
+6.5 Review the output
+
+    - Successfully revised files → "output/"
+    - Failed files (original copies) → "output/failures/"
+
+    After verifying a few samples (e.g., open in a browser), you can copy the
+    revised files back to your live web server, replacing the old HTML.
+
+===============================================================================
+7.0 LOGGING AND MONITORING
+===============================================================================
+
+All actions are recorded in "revise-batch.log" with timestamps. Example log
+entries:
+
+    [2026-04-06 21:35:45] ────────────────────────────────────────────────────────────
+    [2026-04-06 21:35:45] BATCH REVISION (no CSV)
+    [2026-04-06 21:35:45] ────────────────────────────────────────────────────────────
+    [2026-04-06 21:35:45] Config loaded from /home/user/project/movies.cfg
+    [2026-04-06 21:35:45] Input dir:  /home/user/project/input
+    [2026-04-06 21:35:45] Output dir: /home/user/project/output
+    [2026-04-06 21:35:45] Failures:   /home/user/project/output/failures
+    [2026-04-06 21:35:45] Revision prompt: /home/user/project/revise_prompt.txt
+    [2026-04-06 21:35:45] Found 42 files to process.
+    [2026-04-06 21:35:46] Processing: about-a-boy.html
+    [2026-04-06 21:35:48]    Sending request — model: claude-3-haiku-20240307
+    [2026-04-06 21:35:51]    Received revised HTML (12456 chars) in 2.3s
+    [2026-04-06 21:35:51]    ✓ Revised written to output/about-a-boy.html
+    ...
+    [2026-04-06 21:37:12] DONE — Success: 41, Failures: 1
+
+If a failure occurs, the original file is moved to "output/failures/" and the
+error message is logged.
+
+===============================================================================
+8.0 IDEMPOTENCY AND SAFETY
+===============================================================================
+
+8.1 What is idempotency?
+    An idempotent operation can be run multiple times without changing the
+    result beyond the first application. For this script, idempotency would
+    mean that running it twice does not add duplicate spoiler warnings.
+
+8.2 Current behavior
+    The script as provided does NOT check for existing changes. If you run it
+    twice on the same files, the revision prompt may add a second spoiler
+    warning (duplicate div) or change the button text again (no harm there).
+
+8.3 How to make it idempotent
+    Modify the revision prompt to include a condition. For example, add this
+    instruction at the beginning of the prompt:
+
+        "If a <div class="spoiler-warning"> already exists inside .body-text,
+         do not add another one. If the button text already contains '(affiliate)',
+         do not change it."
+
+    With that addition, the script becomes safe to re-run on the same folder.
+
+8.4 Safety recommendation
+    - Always keep a backup of your original "input/" folder.
+    - Run a dry run first.
+    - Review a few output files before mass‑deploying.
+
+===============================================================================
+9.0 TROUBLESHOOTING
+===============================================================================
+
+9.1 "Config file not found: movies.cfg"
+    Solution: Create "movies.cfg" in the same folder as "revise-batch.js".
+
+9.2 "Missing required config key: OPENROUTER_API_KEY"
+    Solution: Add the missing key to "movies.cfg". You must have a valid API
+    key from OpenRouter.
+
+9.3 "Input directory not found: .../input"
+    Solution: Create an "input/" folder and place at least one .html file inside.
+
+9.4 API timeout
+    Solution: Increase TIMEOUT_SECONDS in "movies.cfg" (e.g., to 120 or 180).
+
+9.5 "Response does not contain valid HTML"
+    Solution: The LLM returned malformed output. The original file will be
+    moved to "output/failures/". You can retry later (maybe with a different
+    model) or edit the file manually.
+
+9.6 Duplicate spoiler warnings after second run
+    Solution: Add the idempotency condition to your prompt (see section 8.3).
+    Alternatively, delete the "output/" folder before re‑running, or process
+    only files that haven't been revised yet.
+
+9.7 "Cannot find module 'axios'"
+    Solution: Run "npm install axios" in the script directory.
+
+===============================================================================
+10.0 COST ESTIMATES
+===============================================================================
+
+The following estimates assume average HTML page size of 15 KB (approximately
+5,000 input tokens + 5,000 output tokens per page).
+
+10.1 For 200 pages using claude-3-haiku-20240307:
+     Input: 1,000,000 tokens × $0.25 / 1M = $0.25
+     Output: 1,000,000 tokens × $1.25 / 1M = $1.25
+     Total: ~$1.50 (but actual Haiku pricing is even lower: $0.25/$1.25 per MTok)
+     Revised accurate Haiku cost: ~$0.30 for 200 pages.
+
+10.2 For 200 pages using deepseek-v3.2:
+     Input: 1,000,000 tokens × $0.28 / 1M = $0.28
+     Output: 1,000,000 tokens × $1.12 / 1M = $1.12
+     Total: ~$1.40
+
+10.3 For 200 pages using gemini-1.5-flash:
+     Input: 1,000,000 tokens × $0.075 / 1M = $0.075
+     Output: 1,000,000 tokens × $0.30 / 1M = $0.30
+     Total: ~$0.375
+
+10.4 For 200 pages using gpt-4o-mini:
+     Input: 1,000,000 tokens × $0.15 / 1M = $0.15
+     Output: 1,000,000 tokens × $0.60 / 1M = $0.60
+     Total: ~$0.75
+
+All costs are estimates and subject to change by the API provider. For 200
+pages, even the most expensive recommended model costs less than $2.00.
+
+===============================================================================
+11.0 SCRIPT CODE LOCATION
+===============================================================================
+
+The script "revise-batch.js" is provided separately. It is a standalone Node.js
+script that does not require any CSV or external database. The code includes:
+
+- File system operations (read input, write output, move failures)
+- OpenRouter API client with timeout and token limits
+- Logging with timestamps
+- Dry‑run mode
+
+Refer to the script file itself for the complete implementation.
+
+===============================================================================
+12.0 LICENSE AND SUPPORT
+===============================================================================
+
+This tool is provided for internal use by BooksVersusMovies.com. You are free
+to adapt it for your own projects under the same terms.
+
+For questions or improvements, contact the site owner.
+
+===============================================================================
+END OF README
+===============================================================================

@@ -1,0 +1,234 @@
+TASK: You are upgrading an existing book-vs-film comparison page for BooksVersusMovies.com
+to the site's gold standard format.
+
+================================================================================
+WHAT THIS SITE IS
+================================================================================
+BooksVersusMovies.com publishes honest, specific, opinionated comparisons of books
+and their film or series adaptations. The voice is that of a knowledgeable critic —
+precise, direct, never vague. Every claim names specific characters, scenes, actors,
+or techniques. Generic praise or criticism ("fails to capture the depth") is never
+acceptable. Specific observation ("the film cuts Lord Henry's most devastating
+epigrams, reducing him from a corrupting philosophical force to a sardonic bystander")
+always is.
+
+================================================================================
+GOLD STANDARD STRUCTURE
+================================================================================
+The target output has the following sections in this order. Preserve all existing
+HTML structure, classes, and attributes. Only add or improve content.
+
+1. HEAD — preserve exactly. Do not touch meta tags, schema, GA tag, or stylesheet.
+   Exception: improve the meta description if it is vague or under 100 characters.
+   Target: 140-155 characters, curiosity-driven, names the book author and film/series.
+
+2. PAGE HERO — preserve exactly.
+
+3. COMPARISON PANEL — preserve exactly (book cover, trailer, affiliate links).
+
+4. META STRIP — preserve exactly. Verify verdict badge class matches verdict text:
+   "Book Wins" → verdict-book | "Movie Wins" → verdict-film | "Too Close to Call" → verdict-tie
+
+5. BODY TEXT — this is where the gold standard work happens:
+
+   a) SPOILER WARNING — must be present. If missing, add it:
+      <div class="spoiler-warning" style="background: #f0ebe0; border-left: 4px solid #c8973a; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #4a4540;">
+        ⚠️ <strong>Contains spoilers</strong> – We discuss plot details and the ending.
+        If you haven't read the book or seen the [film/series] yet, you may want to
+        do that first.
+      </div>
+
+   b) STORY IN BRIEF — 2-3 paragraphs. Name specific characters and their roles.
+      Include context about the adaptation's production and reception. End with a
+      sentence about cultural significance or how it was received critically.
+
+   c) CAST & CHARACTER TABLE — ADD THIS if not already present.
+      A simple HTML table comparing the main characters in the book vs the adaptation.
+      Use this exact structure:
+      <table class="char-table">
+        <thead>
+          <tr>
+            <th>Character</th>
+            <th>In the Book</th>
+            <th>In the [Film/Series]</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="char-name">[Character Name]</span><br>
+                <span class="char-actor">[Actor Name]</span></td>
+            <td>[One sentence on the book's portrayal]</td>
+            <td>[One sentence on the adaptation's portrayal]</td>
+          </tr>
+          [Repeat for 3-5 principal characters]
+        </tbody>
+      </table>
+      Add this CSS to the <head> <style> block if not already present:
+      <style>
+        .char-table { width:100%; border-collapse:collapse; margin:1.5rem 0 2rem; font-size:0.88rem; }
+        .char-table th { background:var(--ink); color:var(--cream); padding:0.65rem 1rem; text-align:left; font-family:'Playfair Display',Georgia,serif; font-weight:400; letter-spacing:0.04em; }
+        .char-table td { padding:0.75rem 1rem; border-bottom:1px solid var(--rule); vertical-align:top; line-height:1.5; }
+        .char-table tr:last-child td { border-bottom:none; }
+        .char-table tr:nth-child(even) td { background:#f8f4ee; }
+        .char-name { font-weight:600; color:var(--ink); }
+        .char-actor { font-style:italic; color:var(--gold); font-size:0.82rem; }
+      </style>
+
+   d) KEY DIFFERENCES — 5 sections using <div class="difference"> with <h3> headers.
+      Each section:
+      - Opens with a ONE-SENTENCE summary of the difference (bold or standalone)
+      - Followed by 2-3 SHORT paragraphs (not one long block)
+      - Names specific characters, scenes, actors, or plot points
+      - Compares book and film directly — never generally
+      - Max 250 words per section — shorter is better if the point is made
+      - Break any paragraph over 100 words into two
+
+   e) SHOULD YOU READ FIRST — 2 paragraphs, specific to THIS book and film.
+      Explain the actual consequence of watch-first vs read-first for this title.
+      Not generic adaptation advice.
+
+   f) VERDICT BOX — 2-3 sentences. Name what each version does best. Match tone
+      to verdict badge. Last sentence should be memorable — a closer worth quoting.
+
+   g) FAQ SECTION — ADD THIS if not already present.
+      Add 4-5 frequently asked questions about this title. Use this structure:
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q">[Question people actually search for]</div>
+          <div class="faq-a">[Direct, specific answer — 2-4 sentences]</div>
+        </div>
+      </div>
+      Good FAQ questions for any adaptation page:
+      - Should I read [Title] before watching?
+      - How faithful is the [film/series] to the book?
+      - What does the [film/series] change from the book?
+      - Is [Title] worth reading if I've seen the film?
+      - [One question specific to this title — cast, availability, sequel, etc.]
+
+      Add FAQPage schema to the <head> alongside the existing Review schema:
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "[Question text]",
+            "acceptedAnswer": { "@type": "Answer", "text": "[Answer text]" }
+          }
+        ]
+      }
+      </script>
+
+      Add this CSS to the <head> <style> block:
+      <style>
+        .faq-list { margin:1.5rem 0 2rem; }
+        .faq-item { border-bottom:1px solid var(--rule); padding:1.25rem 0; }
+        .faq-item:first-child { border-top:1px solid var(--rule); }
+        .faq-q { font-family:'Playfair Display',Georgia,serif; font-size:1rem; font-weight:600; color:var(--ink); margin-bottom:0.6rem; line-height:1.35; }
+        .faq-a { font-size:0.9rem; color:var(--ink-light); line-height:1.65; }
+      </style>
+
+6. RELATED CARDS — preserve existing slugs only if they are in the valid slug list
+   below. Replace any invalid or self-referencing slugs with thematically appropriate
+   ones from the list. Convert slug to title case for anchor text.
+
+   VALID SLUGS (only use these):
+   a-knight-of-the-seven-kingdoms, a-little-life, a-man-called-ove,
+   a-walk-to-remember, about-a-boy, all-quiet-on-the-western-front,
+   all-the-light-we-cannot-see, along-came-a-spider, american-gods,
+   american-psycho, animal-farm, annihilation, atonement, band-of-brothers,
+   beloved, big-fish, big-little-lies, big-little-lies-hbo, breakfast-at-tiffanys,
+   bridgerton, brooklyn, catch-22, catch-me-if-you-can, cold-mountain, contact,
+   da-vinci-code, daisy-jones-and-the-six, dark-matter, devil-wears-prada,
+   divergent, doctor-sleep, dracula, dune, eat-pray-love, enders-game,
+   enders-game-film, english-patient, everything-everything, fight-club,
+   five-feet-apart, fourth-wing, frankenstein, geralds-game, girl-on-the-train,
+   girl-with-the-dragon-tattoo, gone-girl, gone-girl-2, good-omens, hamnet,
+   hannibal-series, heated-rivalry, high-fidelity, hillbilly-elegy,
+   hitchhikers-guide, howls-moving-castle, hunger-games-sunrise, i-am-legend,
+   i-robot, interview-with-the-vampire-amcplus, into-the-wild, it-ends-with-us,
+   it-muschietti, jane-eyre, jurassic-park, kite-runner, la-confidential,
+   les-miserables, little-women, lonesome-dove, looking-for-alaska,
+   lord-of-the-flies, love-simon, margos-got-money-troubles, me-before-you,
+   misery, my-brilliant-friend, my-sisters-keeper, narnia-magicians-nephew,
+   never-let-me-go, no-country-for-old-men, normal-people, of-mice-and-men,
+   olive-kitteridge, on-the-road, one-day, one-flew-over-the-cuckoos-nest,
+   outlander, pachinko, people-we-meet-on-vacation, perks-of-being-a-wallflower,
+   pet-sematary-2019, presumed-innocent, pride-and-prejudice, project-hail-mary,
+   ready-player-one, rebecca, remains-of-the-day, remarkably-bright-creatures,
+   reminders-of-him, room, roots-2016, rosemarys-baby, schindlers-list,
+   seabiscuit, sense-and-sensibility, shadow-and-bone, sharp-objects, shogun-2024,
+   silence-of-the-lambs, sophies-choice, sphere, stardust, station-eleven,
+   talented-mr-ripley, the-book-thief, the-client, the-color-purple,
+   the-count-of-monte-cristo, the-fault-in-our-stars, the-firm,
+   the-girl-with-the-dragon-tattoo-fincher, the-giver, the-glass-castle,
+   the-goldfinch, the-great-gatsby, the-handmaids-tale, the-hate-u-give,
+   the-haunting-of-hill-house, the-help, the-hours, the-housemaid,
+   the-lincoln-lawyer, the-longest-ride, the-lovely-bones, the-martian,
+   the-maze-runner, the-maze-runner-film, the-notebook, the-odyssey,
+   the-outsider, the-outsiders, the-pelican-brief, the-pianist,
+   the-picture-of-dorian-gray, the-pillars-of-the-earth, the-princess-bride,
+   the-road, the-secret-garden, the-secret-life-of-bees, the-shining,
+   the-sisterhood-of-the-traveling-pants, the-time-travelers-wife, the-witcher,
+   the-woman-in-the-window, thirteen-reasons-why, to-kill-a-mockingbird,
+   twilight, ugly-love, unbroken, verity, water-for-elephants,
+   where-the-crawdads-sing, white-noise, wild, wolf-hall, world-war-z,
+   wuthering-heights
+
+7. FOOTER — preserve exactly.
+
+================================================================================
+SERIES NOTE — READING ORDER SECTION
+================================================================================
+If the adaptation is based on a SERIES of books (not a standalone novel), add a
+reading order section between the FAQ and the related cards:
+
+<h2>The [Series Name] — Reading Order</h2>
+<p>[One sentence about the series and why order matters.]</p>
+<ol class="reading-order">
+  <li>
+    <span class="ro-num">1</span>
+    <div class="ro-content">
+      <div class="ro-text">
+        <div class="ro-title"><a href="[affiliate link]" target="_blank" rel="noopener sponsored">[Book Title] ([Year])</a></div>
+        <div class="ro-meta">[One sentence description of this book's couple/plot]</div>
+      </div>
+      [Add book cover img if affiliate link available]
+    </div>
+  </li>
+</ol>
+
+Only include this section if the adaptation genuinely draws from multiple books.
+Standalone novel adaptations do not need a reading order section.
+
+================================================================================
+VOICE GUIDELINES
+================================================================================
+- Specific over general, always
+- Short paragraphs — break anything over 100 words into two
+- Opening sentence of each difference section states the conclusion, not the setup
+- Honest over promotional — credit the film when it earns it
+- No superlatives unless earned
+- Contractions are fine
+- Em dashes for asides
+
+================================================================================
+WHAT NOT TO CHANGE
+================================================================================
+- The comparison panel (book cover image, trailer thumbnail, all affiliate links)
+- The meta-strip data (author, dates, director)
+- The footer
+- Any href, src, or data attributes
+
+================================================================================
+CRITICAL INSTRUCTION
+================================================================================
+Return the complete HTML file. Start with <!DOCTYPE html> and end with </html>.
+Nothing before or after. No markdown fences. No explanation.
+The entire response is the raw HTML file.
+
+FINAL REMINDER: Begin your response immediately with <!DOCTYPE html>.
+
+Here is the HTML file to upgrade:

@@ -1,0 +1,63 @@
+TASK: You are improving an existing book-vs-film comparison page for BooksVersusMovies.com.
+
+WHAT THIS SITE IS:
+BooksVersusMovies.com publishes honest, specific, opinionated comparisons of books and their 
+film or series adaptations. The voice is that of a knowledgeable critic — precise, direct, 
+never vague. Every claim names specific characters, scenes, or techniques. The site avoids 
+generic praise or criticism. "Fails to capture the depth" is not acceptable. "The film cuts 
+Lord Henry's most devastating epigrams, reducing him from a corrupting philosophical force 
+to a sardonic bystander" is.
+
+WHAT TO IMPROVE:
+1. STORY IN BRIEF
+   - Must be 2-3 substantial paragraphs
+   - Name specific characters and their roles
+   - Include context about why this adaptation exists and its reception
+   - End with a sentence about the adaptation's cultural significance or how it was received
+
+2. KEY DIFFERENCES (all 5 sections)
+   - Each section must be 200-300 words
+   - Every section must name specific characters, scenes, actors, or plot points
+   - Compare book and film directly and specifically — not generally
+   - No vague language: replace "fails to capture", "struggles to convey", 
+     "lacks depth", "more surface-level" with specific observations
+   - The criticism or praise must be earnable — say exactly what is lost or gained and why
+
+3. SHOULD YOU READ FIRST
+   - 2 solid paragraphs with a clear, specific recommendation
+   - Explain the actual consequence of watching first vs reading first for THIS book/film
+   - Not generic advice about adaptations in general
+
+4. VERDICT
+   - 2-3 sentences minimum
+   - Name what each version does best specifically
+   - Match the tone to the verdict badge (Book Wins / Too Close to Call / Movie Wins)
+
+WHAT NOT TO CHANGE:
+- The HTML structure, classes, and tags — preserve exactly
+- The <head>, meta tags, schema markup, GA tag
+- The comparison panel (book cover, trailer thumbnail, affiliate links)
+- The meta-strip (author, dates, director, verdict badge)
+- The spoiler warning div
+- The related cards section
+- The footer
+- All href, src, and other attributes
+
+VOICE GUIDELINES:
+- Write like a critic who has read the book and watched the film recently
+- Specific over general, always
+- Honest over promotional — if the film genuinely works, say so and say why
+- Short declarative sentences over long qualified ones
+- No superlatives unless earned ("literary masterpiece" is never earned in a one-sentence verdict)
+- Contractions are fine — this is editorial, not academic
+- Em dashes for asides, not parentheses
+
+CRITICAL INSTRUCTION: Return the complete HTML file with improved prose in the content 
+sections only. Start with <!DOCTYPE html> and end with </html>. Nothing before or after. 
+No markdown fences. No explanation. The entire response is the raw HTML file.
+
+FINAL REMINDER: Only the prose content changes. Every tag, class, attribute, link, image, 
+and structural element stays exactly as it is in the input file. Begin your response 
+immediately with <!DOCTYPE html>.
+
+Here is the HTML file to improve:

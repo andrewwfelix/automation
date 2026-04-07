@@ -1,0 +1,147 @@
+# REVISE PROMPT: More Comparisons Related Cards
+# Version: 1.0
+# Date: 2026-04-07
+# Model used to produce draft: Claude 3.5 Sonnet (Anthropic)
+# Author: BooksVersusMovies.com editorial team
+#
+# DRAFT NOTES:
+# - Added current page slug detection (critical missing piece)
+# - Added genre inference from <div class="genre-tag">
+# - Added fallback hierarchy (genre → era → verdict → default)
+# - Added handling for missing <span class="rel-label">
+# - Added case-sensitive slug validation reminder
+# - Added duplicate prevention across all 3 cards
+# - Added default safe pairs for edge cases
+# - Preserved all original surgical fix constraints
+#
+# TESTING NOTES:
+# - Run on along-came-a-spider.html (crime thriller) first
+# - Run on american-psycho.html (psychological thriller/satire) second
+# - Verify no self-links, no invalid slugs, no duplicates
+# - Verify anchor text title case conversion
+# - Verify no other HTML changes
+
+TASK: You are fixing the "More Comparisons" related cards section of a BooksVersusMovies.com page.
+
+THIS IS A SURGICAL FIX ONLY. You will change nothing except the related cards section.
+
+THE PROBLEM:
+The related cards section sometimes contains slugs that don't exist on the site, or links
+back to the same page being viewed. Both must be fixed.
+
+CURRENT PAGE IDENTIFICATION (CRITICAL):
+The current page being revised has a filename like "example.html". Extract the slug by removing ".html" from the filename.
+Example: "along-came-a-spider.html" → current slug = "along-came-a-spider"
+Example: "american-psycho.html" → current slug = "american-psycho"
+Never link to this slug in the related cards section.
+
+GENRE INFERENCE:
+Read the <div class="genre-tag"> from the page. Use that genre to prioritise replacement slugs.
+Examples:
+- "Crime Thriller" → prefer slugs like: the-firm, presumed-innocent, the-client, the-pelican-brief
+- "Psychological Thriller / Satire" → prefer: gone-girl, la-confidential, talented-mr-ripley, fight-club
+- "Horror" → prefer: the-shining, misery, dracula, frankenstein, pet-sematary-2019
+- "Romance" → prefer: the-notebook, me-before-you, one-day, a-walk-to-remember
+- "Science Fiction" → prefer: dune, the-martian, project-hail-mary, ready-player-one
+- "Historical Fiction" → prefer: the-book-thief, all-the-light-we-cannot-see, atonement, cold-mountain
+- "Literary Fiction" → prefer: a-little-life, the-goldfinch, normal-people, the-road
+
+If no genre tag exists, infer genre from page content (H1, meta description, or body text).
+
+EXACT CHANGE TO MAKE:
+
+1. LOCATE the related cards section:
+   <div class="related-section">
+     <h3>More Comparisons</h3>
+     <div class="related-grid">
+       ... 3 x <a class="related-card"> elements ...
+     </div>
+   </div>
+
+2. CHECK each of the 3 related card href values against the VALID SLUG LIST below.
+   - Case-sensitive comparison: all valid slugs are lowercase with hyphens
+   - If a slug is NOT in the valid list → replace it with a thematically appropriate slug from the list
+   - If a slug links back to the CURRENT PAGE (same slug as the file being revised) → replace it
+   - If a slug IS valid and is not the current page → leave it exactly as it is
+
+3. CHOOSE replacement slugs by following this FALLBACK HIERARCHY:
+   - First: Match genre (use GENRE INFERENCE above)
+   - Second: Match era (classic = pre-1980, modern = 1980+ — infer from page context)
+   - Third: Match verdict (Book Wins → prefer other Book Wins pages; Movie Wins → prefer Movie Wins)
+   - Fourth: Any high-quality slug from the valid list
+   - Fifth (default safe pairs): 
+        * Crime/legal thrillers → "the-firm" or "presumed-innocent"
+        * Psychological thrillers → "gone-girl"
+        * Horror → "the-shining"
+        * Romance → "the-notebook"
+        * Science fiction → "the-martian"
+        * Literary fiction → "normal-people"
+
+   CONSTRAINTS:
+   - Never use the same slug twice in the same related grid
+   - Never use the slug of the current page being revised
+   - Never use a slug that is not in the VALID SLUG LIST
+
+4. UPDATE the anchor text to match the replacement slug:
+   - Convert slug to title case: "the-great-gatsby" → "The Great Gatsby"
+   - Remove hyphens and capitalise each word
+   - Handle special cases: "la-confidential" → "LA Confidential"
+   - Keep the <span class="rel-label">Also Compare</span> prefix unchanged
+   - If <span class="rel-label"> is missing from an anchor, add it exactly as: <span class="rel-label">Also Compare</span>
+
+5. PRESERVE EVERYTHING ELSE:
+   - Do not change any other part of the HTML
+   - Keep all href attributes using the format: href="/slug.html"
+   - Keep class="related-card" on each anchor
+   - Keep the <head>, body, meta tags, schema, and all other content exactly as-is
+   - Do not add, remove, or reorder the 3 related-card anchors
+
+VALID SLUG LIST (only use slugs from this list):
+  a-knight-of-the-seven-kingdoms, a-little-life, a-man-called-ove,
+  a-walk-to-remember, about-a-boy, all-quiet-on-the-western-front,
+  all-the-light-we-cannot-see, along-came-a-spider, american-gods,
+  american-psycho, animal-farm, annihilation, atonement, band-of-brothers,
+  beloved, big-fish, big-little-lies, big-little-lies-hbo, breakfast-at-tiffanys,
+  bridgerton, brooklyn, catch-22, catch-me-if-you-can, cold-mountain, contact,
+  da-vinci-code, daisy-jones-and-the-six, dark-matter, devil-wears-prada,
+  divergent, doctor-sleep, dracula, dune, eat-pray-love, enders-game,
+  enders-game-film, english-patient, everything-everything, fight-club,
+  five-feet-apart, fourth-wing, frankenstein, geralds-game, girl-on-the-train,
+  girl-with-the-dragon-tattoo, gone-girl, gone-girl-2, good-omens, hamnet,
+  hannibal-series, heated-rivalry, high-fidelity, hillbilly-elegy,
+  hitchhikers-guide, howls-moving-castle, hunger-games-sunrise, i-am-legend,
+  i-robot, interview-with-the-vampire-amcplus, into-the-wild, it-ends-with-us,
+  it-muschietti, jane-eyre, jurassic-park, kite-runner, la-confidential,
+  les-miserables, little-women, lonesome-dove, looking-for-alaska,
+  lord-of-the-flies, love-simon, margos-got-money-troubles, me-before-you,
+  misery, my-brilliant-friend, my-sisters-keeper, narnia-magicians-nephew,
+  never-let-me-go, no-country-for-old-men, normal-people, of-mice-and-men,
+  olive-kitteridge, on-the-road, one-day, one-flew-over-the-cuckoos-nest,
+  outlander, pachinko, people-we-meet-on-vacation, perks-of-being-a-wallflower,
+  pet-sematary-2019, presumed-innocent, pride-and-prejudice, project-hail-mary,
+  ready-player-one, rebecca, remains-of-the-day, remarkably-bright-creatures,
+  reminders-of-him, room, roots-2016, rosemarys-baby, schindlers-list,
+  seabiscuit, sense-and-sensibility, shadow-and-bone, sharp-objects, shogun-2024,
+  silence-of-the-lambs, sophies-choice, sphere, stardust, station-eleven,
+  talented-mr-ripley, the-book-thief, the-client, the-color-purple,
+  the-count-of-monte-cristo, the-fault-in-our-stars, the-firm,
+  the-girl-with-the-dragon-tattoo-fincher, the-giver, the-glass-castle,
+  the-goldfinch, the-great-gatsby, the-handmaids-tale, the-hate-u-give,
+  the-haunting-of-hill-house, the-help, the-hours, the-housemaid,
+  the-lincoln-lawyer, the-longest-ride, the-lovely-bones, the-martian,
+  the-maze-runner, the-maze-runner-film, the-notebook, the-odyssey,
+  the-outsider, the-outsiders, the-pelican-brief, the-pianist,
+  the-picture-of-dorian-gray, the-pillars-of-the-earth, the-princess-bride,
+  the-road, the-secret-garden, the-secret-life-of-bees, the-shining,
+  the-sisterhood-of-the-traveling-pants, the-time-travelers-wife, the-witcher,
+  the-woman-in-the-window, thirteen-reasons-why, to-kill-a-mockingbird,
+  twilight, ugly-love, unbroken, verity, water-for-elephants,
+  where-the-crawdads-sing, white-noise, wild, wolf-hall, world-war-z,
+  wuthering-heights
+
+CRITICAL INSTRUCTION: Return the complete HTML file with ONLY the related cards section
+changed. Start with <!DOCTYPE html> and end with </html>. Nothing before or after.
+No markdown fences. No explanation. The entire response is the raw HTML file.
+
+FINAL REMINDER: Only the 3 related card anchors may change. Every other byte of the
+file must be identical to the input. Begin your response immediately with <!DOCTYPE html>.

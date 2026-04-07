@@ -1,0 +1,158 @@
+CRITICAL OUTPUT RULE — READ THIS FIRST:
+You must ALWAYS return the complete HTML file as your entire response, even if the 
+page already meets all requirements and no changes are needed. NEVER return a text 
+explanation, a summary, or ask a clarifying question. If the page is already perfect, 
+return the original HTML completely unchanged. Your response must start with 
+<!DOCTYPE html> and end with </html> and contain nothing else whatsoever.
+
+BUSINESS OBJECTIVES FOR THIS RESTRUCTURE:
+- Transform the page into a "Decision Engine" that drives affiliate revenue.
+- Improve SEO via semantic HTML, schema markup, and scannable listicle format.
+- Increase click‑through rates with rich snippets and trend‑jacking metadata.
+
+YOU ARE AN HTML ARCHITECT. Follow these instructions exactly.
+
+INPUT: An existing HTML page (possibly using old classes like .container, .hero-content, no side‑by‑side panels, no meta‑strip, no difference divs).
+
+OUTPUT: A complete HTML page using the exact structure below. PRESERVE all existing editorial text (story summary, key differences, verdict) – only move it into the new structure. Do not rewrite the prose unless it contains factual errors.
+
+THE TARGET STRUCTURE (use these classes exactly as shown):
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[Existing title or derive from content]</title>
+  <meta name="description" content="[Write a compelling, curiosity‑driven description under 160 chars]">
+  <link rel="stylesheet" href="css/style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P0DY0XDWVV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P0DY0XDWVV');
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "name": "[Title]: Book vs [Film/Series]",
+    "reviewBody": "[First sentence of verdict or summary]",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "4",
+      "bestRating": "5",
+      "worstRating": "3"
+    },
+    "author": { "@type": "Organization", "name": "BooksVersusMovies.com" },
+    "itemReviewed": {
+      "@type": "Book",
+      "name": "[Title]",
+      "author": { "@type": "Person", "name": "[Author]" },
+      "datePublished": "[Book Year]"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="site-logo" href="/">Books<span>Versus</span>Movies</a>
+    <nav><a href="/">Home</a> &nbsp;&middot;&nbsp; <a href="/index_alt.html">Browse All</a> &nbsp;&middot;&nbsp; <a href="/about.html">About</a></nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="genre-tag">[Genre from existing page or infer]</div>
+  <h1>[Title]</h1>
+  <p class="subtitle">Book ([Book Year]) vs. [Film/Series] ([Release Year]) &mdash; [Director or "Various"]</p>
+</div>
+
+<div class="page-wrap">
+  <div class="comparison">
+    <div class="panel-book">
+      <div class="panel-label">The Book</div>
+      <a class="book-cover-link" href="[Affiliate link if exists, else #]" target="_blank" rel="noopener sponsored">
+        <img class="book-cover" src="./images/[cover image filename]" alt="[Title] book cover" loading="lazy">
+      </a>
+      <a class="buy-btn" href="[Affiliate link]" target="_blank" rel="noopener sponsored">[Preserve existing button text exactly as-is]</a>
+      <p class="affiliate-disclosure">As an Amazon Associate I earn from qualifying purchases.</p>
+    </div>
+    <div class="panel-film">
+      <div class="panel-label">The [Film/Series]</div>
+      <a class="trailer-link" href="[Trailer URL]" target="_blank" rel="noopener">
+        <div class="trailer-thumbnail">
+          <img src="https://img.youtube.com/vi/[YouTube ID]/maxresdefault.jpg" alt="[Title] trailer">
+          <div class="trailer-play">&#9658;</div>
+        </div>
+      </a>
+      <p class="trailer-note">Starring [cast if known, else leave blank] &mdash; [Film/Series]: [Year]</p>
+    </div>
+  </div>
+
+  <div class="meta-strip">
+    <div class="meta-item"><strong>Author</strong>[Author]</div>
+    <div class="meta-item"><strong>Book Published</strong>[Book Year]</div>
+    <div class="meta-item"><strong>[Film/Series] Released</strong>[Release Year]</div>
+    <div class="meta-item"><strong>Director</strong>[Director]</div>
+    <span class="verdict-badge verdict-[book/film/tie]">[Verdict text]</span>
+  </div>
+
+  <div class="body-text">
+    <h2>The Story in Brief</h2>
+    <p>[INSERT EXISTING STORY SUMMARY FROM OLD PAGE]</p>
+
+    <h2>Key Differences</h2>
+    [FOR EACH DIFFERENCE IN THE OLD PAGE, CREATE A <div class="difference"> WITH AN <h3> HEADER AND THE PARAGRAPH TEXT.
+     IF THE OLD PAGE HAD PLAIN PARAGRAPHS OR BULLET POINTS, CONVERT THEM INTO THIS FORMAT.
+     PRESERVE THE ORIGINAL WORDING AS MUCH AS POSSIBLE.
+     EXAMPLE:
+     <div class="difference">
+       <h3>[Aspect or change]</h3>
+       <p>[Original analysis text]</p>
+     </div>
+    ]
+
+    <h2>Should You Read First?</h2>
+    <p>[INSERT EXISTING RECOMMENDATION OR WRITE A NEW ONE BASED ON THE VERDICT]</p>
+
+    <div class="verdict-box">
+      <div class="verdict-title">Verdict</div>
+      <p>[INSERT EXISTING VERDICT PARAGRAPH FROM OLD PAGE]</p>
+    </div>
+  </div>
+
+  <div class="related-section">
+    <h3>More [Genre] Comparisons</h3>
+    <div class="related-grid">
+      <!-- Keep any existing related links; if none, leave placeholders -->
+      <a class="related-card" href="/slug1.html"><span class="rel-label">Also Compare</span>Title 1</a>
+      <a class="related-card" href="/slug2.html"><span class="rel-label">Also Compare</span>Title 2</a>
+      <a class="related-card" href="/slug3.html"><span class="rel-label">Also Compare</span>Title 3</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 BooksVersusMovies.com &nbsp;&mdash;&nbsp; <a href="/">Home</a> &nbsp;&middot;&nbsp; <a href="about.html">About</a></p>
+  <p style="margin-top:0.5rem;font-size:0.75rem;color:#444;">As an Amazon Associate I earn from qualifying purchases.</p>
+</footer>
+</body>
+</html>
+
+SPECIAL INSTRUCTIONS:
+- If any piece of information is missing from the old page (e.g., affiliate link, trailer URL, cast), leave the placeholder as is (e.g., href="#") or infer from context if obvious.
+- Do not change the meaning or wording of the existing prose – only rewrap it into the new structure.
+- If the old page had a "Key Differences" section without subheadings, create descriptive <h3> headings based on the first few words of each paragraph or the main topic.
+- Preserve all existing schema if it's already correct; otherwise, generate new schema using the values from the page.
+- The final output must be a complete, standalone HTML file that renders correctly with your existing style.css.
+
+FINAL OUTPUT REMINDER:
+Return the complete HTML file — nothing else. Even if the input page already matches 
+the target structure perfectly, output the full HTML unchanged. Do not explain what 
+you did or didn't change. Do not ask questions. Do not add any text before <!DOCTYPE 
+html> or after </html>. Begin your response immediately with <!DOCTYPE html>.
+
+Here is the HTML file to restructure:

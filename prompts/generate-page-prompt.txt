@@ -1,0 +1,202 @@
+CRITICAL INSTRUCTION: Your response must be a single valid HTML document. Start your response with <!DOCTYPE html> and end it with </html>. Do not include any text, explanation, preamble, or markdown before or after the HTML. Do not wrap the HTML in code fences. Your entire response is the HTML file and nothing else.
+
+You are writing a book-vs-film comparison page for BooksVersusMovies.com.
+
+BOOK DETAILS:
+- Title: {{TITLE}}
+- Author: {{AUTHOR}}
+- Genre: {{GENRE}}
+- Book published: {{BOOK_YEAR}}
+- Director/Creator: {{DIRECTOR}}
+- Film/Series year: {{FILM_YEAR}}
+- Verdict: {{VERDICT}}
+- Affiliate link: {{AFFILIATE_LINK}}
+- Trailer URL: {{TRAILER_URL}}
+- YouTube video ID: {{YOUTUBE_ID}}
+- Book image filename: {{IMAGE}}
+- Slug: {{SLUG}}
+- Media type: {{MEDIA_LABEL}}
+- Verdict badge class: {{VERDICT_CLASS}}
+
+OUTPUT: A complete, valid HTML file. Return ONLY the HTML — no markdown fences, no explanation.
+
+TEMPLATE TO FOLLOW EXACTLY:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}}: Book vs {{MEDIA_LABEL}} — Key Differences &amp; Should You Read First?</title>
+  <meta name="description" content="{{META_DESC}}">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "name": "{{TITLE}}: Book vs {{MEDIA_LABEL}}",
+    "reviewBody": "{{REVIEW_BODY}}",
+    "reviewRating": { "@type": "Rating", "ratingValue": "{{RATING}}", "bestRating": "5", "worstRating": "3" },
+    "author": { "@type": "Organization", "name": "BooksVersusMovies.com" },
+    "itemReviewed": {
+      "@type": "Book",
+      "name": "{{TITLE}}",
+      "author": { "@type": "Person", "name": "{{AUTHOR}}" },
+      "datePublished": "{{BOOK_YEAR}}"
+    }
+  }
+  </script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P0DY0XDWVV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P0DY0XDWVV');
+  </script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="site-logo" href="/">Books<span>Versus</span>Movies</a>
+    <nav><a href="/">Home</a> &nbsp;&middot;&nbsp; <a href="/index_alt.html">Browse All</a> &nbsp;&middot;&nbsp; <a href="/about.html">About</a></nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="genre-tag">{{GENRE}}</div>
+  <h1>{{TITLE}}</h1>
+  <p class="subtitle">Book ({{BOOK_YEAR}}) vs. {{MEDIA_LABEL}} ({{FILM_YEAR}}) &mdash; dir. {{DIRECTOR}}</p>
+</div>
+
+<div class="page-wrap">
+  <div class="comparison">
+    <div class="panel-book">
+      <div class="panel-label">The Book</div>
+      <a class="book-cover-link" href="{{AFFILIATE_LINK}}" target="_blank" rel="noopener sponsored">
+        <img class="book-cover" src="./images/{{IMAGE}}" alt="{{TITLE}} book cover {{AUTHOR}} {{BOOK_YEAR}}" loading="lazy">
+      </a>
+      <a class="buy-btn" href="{{AFFILIATE_LINK}}" target="_blank" rel="noopener sponsored">Buy the Book &rarr;</a>
+      <p class="affiliate-disclosure">As an Amazon Associate I earn from qualifying purchases.</p>
+    </div>
+    <div class="panel-film">
+      <div class="panel-label">The {{MEDIA_LABEL}}</div>
+      [IF {{YOUTUBE_ID}} is not empty, output this block:]
+      <a class="trailer-link" href="{{TRAILER_URL}}" target="_blank" rel="noopener">
+        <div class="trailer-thumbnail">
+          <img src="https://img.youtube.com/vi/{{YOUTUBE_ID}}/maxresdefault.jpg" alt="{{TITLE}} {{FILM_YEAR}} official trailer">
+          <div class="trailer-play">&#9658;</div>
+        </div>
+      </a>
+      [ELSE IF {{VIDEO_AFFILIATE_LINK}} is not empty, output this block instead:]
+      <a class="buy-video-btn" href="{{VIDEO_AFFILIATE_LINK}}" target="_blank" rel="noopener sponsored">
+        Buy or Rent &rarr;
+      </a>
+      <p class="affiliate-disclosure">As an Amazon Associate I earn from qualifying purchases.</p>
+      [END IF]
+      <p class="trailer-note">{{STARRING_LINE}}</p>
+    </div>
+  </div>
+
+  <div class="meta-strip">
+    <div class="meta-item"><strong>Author</strong>{{AUTHOR}}</div>
+    <div class="meta-item"><strong>Book Published</strong>{{BOOK_YEAR}}</div>
+    <div class="meta-item"><strong>{{MEDIA_LABEL}} Released</strong>{{FILM_YEAR}}</div>
+    <div class="meta-item"><strong>Director</strong>{{DIRECTOR}}</div>
+    <span class="verdict-badge {{VERDICT_CLASS}}">{{VERDICT}}</span>
+  </div>
+
+  <div class="body-text">
+    <h2>The Story in Brief</h2>
+    <p>{{STORY_BRIEF}}</p>
+
+    <h2>Key Differences</h2>
+
+    <div class="difference">
+      <h3>{{DIFF_1_TITLE}}</h3>
+      <p>{{DIFF_1_BODY}}</p>
+    </div>
+
+    <div class="difference">
+      <h3>{{DIFF_2_TITLE}}</h3>
+      <p>{{DIFF_2_BODY}}</p>
+    </div>
+
+    <div class="difference">
+      <h3>{{DIFF_3_TITLE}}</h3>
+      <p>{{DIFF_3_BODY}}</p>
+    </div>
+
+    <div class="difference">
+      <h3>{{DIFF_4_TITLE}}</h3>
+      <p>{{DIFF_4_BODY}}</p>
+    </div>
+
+    <div class="difference">
+      <h3>{{DIFF_5_TITLE}}</h3>
+      <p>{{DIFF_5_BODY}}</p>
+    </div>
+
+    <h2>Should You Read First?</h2>
+    <p>{{READ_FIRST}}</p>
+
+    <div class="verdict-box">
+      <div class="verdict-title">Verdict</div>
+      <p>{{VERDICT_TEXT}}</p>
+    </div>
+  </div>
+
+  <div class="related-section">
+    <h3>More Comparisons</h3>
+    <div class="related-grid">
+      <a class="related-card" href="/{{RELATED_1_SLUG}}.html"><span class="rel-label">Also Compare</span>{{RELATED_1_TITLE}}</a>
+      <a class="related-card" href="/{{RELATED_2_SLUG}}.html"><span class="rel-label">Also Compare</span>{{RELATED_2_TITLE}}</a>
+      <a class="related-card" href="/{{RELATED_3_SLUG}}.html"><span class="rel-label">Also Compare</span>{{RELATED_3_TITLE}}</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 BooksVersusMovies.com &nbsp;&mdash;&nbsp; <a href="/">Home</a> &nbsp;&middot;&nbsp; <a href="about.html">About</a></p>
+  <p style="margin-top:0.5rem;font-size:0.75rem;color:#444;">As an Amazon Associate I earn from qualifying purchases.</p>
+</footer>
+</body>
+</html>
+
+WRITING RULES:
+- Voice: precise, opinionated, no hedging. Write like a knowledgeable critic, not a book report.
+- Each difference section: 200-300 words. Name specific characters, scenes, actors, techniques. Compare directly.
+- Story in brief: 2-3 paragraphs. Specific about plot and context. End with the adaptation's significance.
+- Verdict honours the given verdict ({{VERDICT}}). If Book Wins, the book genuinely wins. If Too Close to Call, acknowledge both sides equally.
+- Should You Read First: 2 paragraphs with a clear, specific recommendation.
+- META_DESC: 150 characters max. Include author, year, director/stars, 2-3 key themes.
+- REVIEW_BODY: one punchy sentence summarising the verdict.
+- RATING: 5 if Too Close to Call or Book Wins strongly, 4 if Book Wins but the adaptation is decent.
+- STARRING_LINE: e.g. "Starring Viola Davis, Emma Stone &mdash; Film: 2011"
+- Related cards: pick 3 thematically similar slugs from this list (these pages actually exist on the site):
+  atonement, band-of-brothers, beloved, big-little-lies, big-little-lies-hbo, bridgerton, brooklyn,
+  catch-22, cold-mountain, contact, coraline, da-vinci-code, dark-matter, daisy-jones-and-the-six,
+  divergent, doctor-sleep, dune, eat-pray-love, enders-game-film, fight-club, frankenstein,
+  geralds-game, girl-on-the-train, gone-girl, gone-girl-2, good-omens, hamnet, high-fidelity,
+  hitchhikers-guide, howls-moving-castle, hunger-games-sunrise, i-am-legend, i-robot,
+  interview-with-the-vampire-amcplus, it-ends-with-us, it-muschietti, jane-eyre, jurassic-park,
+  kite-runner, little-women, lonesome-dove, lord-of-the-flies, me-before-you, misery,
+  narnia-magicians-nephew, never-let-me-go, no-country-for-old-men, normal-people, of-mice-and-men,
+  on-the-road, one-day, one-flew-over-the-cuckoos-nest, outlander, pachinko,
+  perks-of-being-a-wallflower, pet-sematary-2019, pride-and-prejudice, project-hail-mary,
+  ready-player-one, rebecca, remains-of-the-day, remarkably-bright-creatures, room, rosemarys-baby,
+  schindlers-list, sense-and-sensibility, shadow-and-bone, sharp-objects, shogun-2024,
+  silence-of-the-lambs, sphere, stardust, station-eleven, talented-mr-ripley, the-book-thief,
+  the-color-purple, the-fault-in-our-stars, the-firm, the-giver, the-great-gatsby,
+  the-handmaids-tale, the-haunting-of-hill-house, the-help, the-hours, the-lincoln-lawyer,
+  the-lovely-bones, the-martian, the-maze-runner-film, the-notebook, the-odyssey, the-outsider,
+  the-outsiders, the-pillars-of-the-earth, the-princess-bride, the-road, the-secret-garden,
+  the-shining, the-time-travelers-wife, the-witcher, the-woman-in-the-window, to-kill-a-mockingbird,
+  twilight, ugly-love, verity, where-the-crawdads-sing, wild, wolf-hall, world-war-z, wuthering-heights
+- Do NOT use HTML entities for apostrophes in body text — use ' directly
+- Use &mdash; for em dashes in HTML, &amp; for ampersands inside HTML attributes
+- Output ONLY the HTML. No preamble. No explanation. No markdown code fences.
+
+FINAL REMINDER: Begin your response immediately with <!DOCTYPE html> and end it with </html>. Nothing before, nothing after. The entire response is the raw HTML file.

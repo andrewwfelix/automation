@@ -1,0 +1,139 @@
+TASK: You are upgrading an existing book-vs-film comparison page for BooksVersusMovies.com
+to the site's gold standard format.
+
+CRITICAL OUTPUT INSTRUCTION:
+- Output ONLY the complete HTML file.
+- Start with <!DOCTYPE html> and end with </html>.
+- No explanations, no questions, no markdown, no text outside the HTML.
+- If you cannot follow this exactly, output nothing.
+- Begin immediately with <!DOCTYPE html>.
+
+================================================================================
+WHAT THIS SITE IS
+================================================================================
+BooksVersusMovies.com publishes honest, specific, opinionated comparisons of books
+and their film or series adaptations. The voice is that of a knowledgeable critic —
+precise, direct, never vague. Every claim names specific characters, scenes, actors,
+or techniques.
+
+================================================================================
+SEO & PERFORMANCE REQUIREMENTS
+================================================================================
+
+1. PRIMARY KEYWORD TARGETING:
+   Extract from URL slug (filename without .html). 
+   - H1 must contain the title.
+   - Meta description (140-155 chars) must start with: "[Title]: Book vs [Film/Show] —"
+   - First paragraph of "Story in Brief" must include the keyword phrase within first 50 words.
+
+2. INTERNAL LINKS (add 2-3 contextual links within body text):
+   - Link to genre landing page (e.g., <a href='/genre/romance.html'>best romance adaptations</a>)
+   - Link to author's other covered works (if any exist)
+   - Link to series landing page (for series adaptations)
+
+3. IMAGE ALT ATTRIBUTES (optimise for image search):
+   - Book cover img: alt="[Title] book cover by [Author] — [year] edition"
+   - Trailer thumbnail: alt="[Title] [year] [film/show] official trailer — [lead actor]"
+   - Reading order covers: alt="[Title] book cover — [Series name] book [number]"
+
+4. SCHEMA MARKUP:
+   In addition to existing Review and FAQPage schema, add:
+   a) BreadcrumbList (see format below)
+   b) VideoObject schema for the trailer (if YouTube embed exists)
+
+5. SOCIAL META TAGS (Open Graph / Twitter Card) — add to <head>:
+   <meta property="og:title" content="[Title]: Book vs [Film/Show] — Full Comparison">
+   <meta property="og:description" content="[First 150 chars of meta description]">
+   <meta property="og:image" content="https://booksversusmovies.com/images/[slug]-social.jpg">
+   <meta property="og:url" content="https://booksversusmovies.com/[slug].html">
+   <meta property="og:type" content="article">
+   <meta name="twitter:card" content="summary_large_image">
+   <meta name="twitter:title" content="[Same as OG title]">
+   <meta name="twitter:description" content="[Same as OG description]">
+   <meta name="twitter:image" content="[Same as OG image]">
+   If no custom social image exists, use the book cover image URL.
+
+6. FRESHNESS SIGNAL:
+   Add <p class="last-updated" style="font-size:0.7rem; color:#666; margin-top:0.5rem;">Last updated: [current date]</p> below the verdict box.
+
+7. LSI KEYWORD VARIATION (natural, not forced):
+   Use at least once: "adaptation", "faithful", "cast", "ending differences", "where to watch".
+
+8. CANONICAL TAG:
+   Ensure <link rel="canonical" href="https://booksversusmovies.com/[slug].html"> is in <head>.
+
+9. PERFORMANCE PRESERVATION:
+   - Keep loading="lazy" on images below the fold.
+   - Do not remove width/height attributes.
+
+================================================================================
+GOLD STANDARD STRUCTURE (in this order)
+================================================================================
+
+1. HEAD — preserve exactly, but improve meta description, add social tags, canonical, and new schemas.
+
+2. PAGE HERO — preserve exactly.
+
+3. COMPARISON PANEL — preserve exactly (book cover, trailer, affiliate links).
+
+4. META STRIP — preserve exactly. Verify verdict badge class:
+   "Book Wins" → verdict-book | "Movie Wins" → verdict-film | "Too Close to Call" → verdict-tie
+
+5. BODY TEXT — add or improve the following sections:
+
+   a) SPOILER WARNING — must be present. If missing, add:
+      <div class="spoiler-warning" style="background:#f0ebe0;border-left:4px solid #c8973a;padding:0.75rem 1rem;margin-bottom:1.5rem;font-size:0.85rem;">
+        ⚠️ <strong>Contains spoilers</strong> – We discuss plot details and the ending.
+        If you haven't read the book or seen the [film/series] yet, you may want to do that first.
+      </div>
+
+   b) STORY IN BRIEF — 2-3 paragraphs. Include production context and reception. First 50 words contain primary keyword.
+
+   c) CAST & CHARACTER TABLE — add if missing:
+      <table class="char-table">...</table> with 3-5 rows. Include actor names.
+      Add corresponding CSS to <head> if not present (see reference).
+
+   d) KEY DIFFERENCES — 5-6 sections using <div class="difference"> with <h3>.
+      Each section: one-sentence summary, then 2-3 short paragraphs. Name specific characters, scenes, actors.
+      Max 250 words per section.
+
+   e) WHY THIS ADAPTATION WORKED (optional but recommended):
+      <div class="why-it-worked"> with bullet list of specific reasons.
+
+   f) SHOULD YOU READ FIRST — 2 paragraphs, specific to this title.
+
+   g) VERDICT BOX — 2-3 sentences. Followed immediately by freshness signal.
+
+   h) FAQ SECTION — 4-7 questions. Use <div class="faq-list"> and <div class="faq-item">.
+      Include FAQPage schema in <head>.
+
+   i) RELATED SEARCHES SECTION (optional):
+      <div class="related-searches"><h3>More [Genre] Book vs Film Comparisons</h3> with 4-6 links.
+
+6. READING ORDER SECTION (only for series):
+   Add full list of books with affiliate links, cover images, and spotlight on current book.
+
+7. RELATED CARDS SECTION — DO NOT CHANGE. The links will be fixed later by a separate process.
+
+8. FOOTER — preserve exactly.
+
+================================================================================
+VOICE GUIDELINES
+================================================================================
+- Specific over general. Name characters, actors, scenes, techniques.
+- Short paragraphs (break anything over 100 words).
+- Honest over promotional.
+- No superlatives unless earned.
+- Use LSI keywords naturally.
+
+================================================================================
+WHAT NOT TO CHANGE
+================================================================================
+- The comparison panel (book cover, trailer thumbnail, affiliate links)
+- The meta-strip data (author, dates, director)
+- The footer
+- Any href, src, or data attributes except as specified for internal links and image alt text
+
+================================================================================
+BEGIN OUTPUT IMMEDIATELY WITH <!DOCTYPE html>
+================================================================================

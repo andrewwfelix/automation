@@ -1,0 +1,140 @@
+TASK: You are upgrading an existing book-vs-film comparison page for BooksVersusMovies.com
+to the site's current gold standard format (modeled after heated-rivalry.html).
+
+================================================================================
+IMPROVEMENTS MADE IN THIS REVISED PROMPT (April 2026)
+================================================================================
+- Added clear "Gold Standard Reference" section pointing to heated-rivalry.html style
+- Made Spoiler Warning, Why This Adaptation Worked, and Reading Order (when applicable) REQUIRED
+- Strengthened Key Differences instructions: now requires 5-6 concrete, specific sections
+- Added full .char-table CSS block so the model always includes proper styling
+- Improved Story in Brief guidance with production context and reception
+- Added explicit instruction for Reading Order section for series books
+- Clarified proportional upgrade rule (don't force length on short original pages)
+- Added exact HTML for canonical tag and improved social meta tags with fallback
+- Added BreadcrumbList schema example
+- Added today's date placeholder for "Last updated"
+- Made voice and specificity guidelines stricter
+- Better organized structure with clearer mandatory vs optional sections
+
+CRITICAL OUTPUT INSTRUCTION:
+- Output ONLY the complete HTML file.
+- Start with <!DOCTYPE html> and end with </html>.
+- No explanations, no questions, no markdown, no text outside the HTML.
+- If you cannot follow this exactly, output nothing.
+- Begin immediately with <!DOCTYPE html>.
+
+================================================================================
+GOLD STANDARD REFERENCE
+================================================================================
+Use heated-rivalry.html as the primary style and quality benchmark:
+- Rich, specific, opinionated voice
+- Detailed character table
+- Well-structured Key Differences sections
+- Why This Adaptation Worked box with bullet list
+- Full Reading Order section (when the book is part of a series)
+- FAQ section with 5–7 strong questions
+- Clean, scannable layout with generous use of subheadings
+
+================================================================================
+WHAT THIS SITE IS
+================================================================================
+BooksVersusMovies.com publishes honest, specific, opinionated comparisons of books
+and their film or series adaptations. The voice is that of a knowledgeable critic —
+precise, direct, never vague. Every claim names specific characters, scenes, actors,
+or techniques.
+
+================================================================================
+SEO & PERFORMANCE REQUIREMENTS
+================================================================================
+
+1. PRIMARY KEYWORD TARGETING:
+   Extract from URL slug (filename without .html). 
+   - H1 must contain the title.
+   - Meta description (140-155 chars) must start with: "[Title]: Book vs [Film/Show] —"
+   - First paragraph of "Story in Brief" must include the keyword phrase within first 50 words.
+
+2. INTERNAL LINKS (add 2-3 contextual links within body text):
+   - Link to relevant genre (e.g., romance adaptations, sports drama, literary fiction)
+   - Link to author's other covered works if any exist
+   - Link to series page when applicable
+
+3. IMAGE ALT ATTRIBUTES:
+   - Book cover: alt="[Title] book cover by [Author] — [year] edition"
+   - Trailer: alt="[Title] [year] [film/show] official trailer — [lead actor]"
+   - Reading order covers: alt="[Title] book cover — [Series name] book [number]"
+
+4. SCHEMA MARKUP:
+   - Keep existing Review and FAQPage schema
+   - Add BreadcrumbList schema
+   - Add VideoObject schema for the trailer (if YouTube link exists)
+
+5. SOCIAL META TAGS — add to <head>:
+   <meta property="og:title" content="[Title]: Book vs [Film/Show] — Full Comparison">
+   <meta property="og:description" content="[First 150 chars of meta description]">
+   <meta property="og:image" content="https://booksversusmovies.com/images/[slug]-social.jpg">
+   <meta property="og:url" content="https://booksversusmovies.com/[slug].html">
+   <meta property="og:type" content="article">
+   <meta name="twitter:card" content="summary_large_image">
+   <meta name="twitter:title" content="[Same as OG title]">
+   <meta name="twitter:description" content="[Same as OG description]">
+   <meta name="twitter:image" content="[Same as OG image]">
+   (Fallback: use book cover image if no social image exists)
+
+6. CANONICAL TAG:
+   <link rel="canonical" href="https://booksversusmovies.com/[slug].html">
+
+7. FRESHNESS SIGNAL:
+   Add this exactly below the verdict box:
+   <p class="last-updated" style="font-size:0.75rem; color:#666; margin-top:0.8rem;">Last updated: April 7, 2026</p>
+
+8. LSI KEYWORDS (use naturally):
+   adaptation, faithful, cast, ending differences, where to watch, book vs show, book vs movie
+
+================================================================================
+GOLD STANDARD STRUCTURE (Follow in this exact order)
+================================================================================
+
+1. HEAD — Improve meta description, add all social meta tags, canonical, and new schemas.
+
+2. PAGE HERO — Preserve exactly.
+
+3. COMPARISON PANEL — Preserve exactly (book cover, trailer, affiliate links).
+
+4. META STRIP — Preserve exactly. Use correct verdict badge class.
+
+5. BODY TEXT — Required sections in order:
+
+   a) SPOILER WARNING (mandatory — place right after meta-strip)
+   b) STORY IN BRIEF — 2-3 strong paragraphs. Include keyword early, production context, and reception.
+   c) CAST & CHARACTER TABLE (add if missing or improve existing)
+   d) KEY DIFFERENCES — Exactly 5-6 sections using <div class="difference">. Each must focus on one concrete aspect (e.g. interior voice, timeline, world-building, supporting characters, ending). Be specific.
+   e) WHY THIS ADAPTATION WORKED — Include this box with a bulleted list of 4-6 specific reasons.
+   f) SHOULD YOU READ FIRST — 2 clear, specific paragraphs with a recommendation.
+   g) VERDICT BOX — Strong 2-3 sentence verdict.
+   h) FAQ SECTION — 5-7 high-quality questions using the faq-list structure.
+   i) READING ORDER SECTION — REQUIRED if the book is part of a series (model exactly after Heated Rivalry).
+
+6. RELATED SECTION — Preserve exactly.
+
+7. FOOTER — Preserve exactly.
+
+================================================================================
+VOICE GUIDELINES
+================================================================================
+- Be specific: always name characters, actors, scenes, or techniques.
+- Short paragraphs (break anything longer than ~90 words).
+- Honest and opinionated, never vague or promotional.
+- No empty superlatives — every strong claim must be earned and explained.
+
+================================================================================
+WHAT NOT TO CHANGE
+================================================================================
+- The comparison panel (book cover, trailer thumbnail, affiliate links)
+- The meta-strip data (author, dates, director/creator)
+- The footer
+- Any existing href, src, or data attributes except for new internal links and improved alt text
+
+================================================================================
+BEGIN OUTPUT IMMEDIATELY WITH <!DOCTYPE html>
+================================================================================

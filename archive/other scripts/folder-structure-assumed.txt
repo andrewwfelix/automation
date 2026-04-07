@@ -1,0 +1,12 @@
+your-project/
+├── revise-batch.js
+├── revise_prompt.txt
+├── movies.cfg          (only needs OPENROUTER_API_KEY, MODEL, maybe TIMEOUT_SECONDS)
+├── input/
+│   ├── about-a-boy.html
+│   ├── jane-eyre.html
+│   └── ...
+├── output/
+│   ├── (successful revisions go here)
+│   └── failures/       (created automatically; original files on error go here)
+└── revise-batch.log

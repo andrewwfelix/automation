@@ -1,0 +1,33 @@
+BUSINESS OBJECTIVES FOR THIS REVISION:
+- Increase reader trust and reduce complaints by clearly marking spoilers before they appear.
+- Improve affiliate disclosure transparency (Amazon requires “clear and conspicuous” disclosure; adding “(affiliate)” next to each button meets best practice and may increase click‑through).
+- Maintain consistent site quality across all comparison pages to encourage return visits and social sharing.
+
+EXACT CHANGES TO APPLY TO THE PROVIDED HTML FILE:
+
+1. ADD SPOILER WARNING
+   - Locate the <div class="body-text"> element.
+   - Inside it, immediately after the opening <div class="body-text"> tag and before any <h2> heading, insert the following HTML:
+     <div class="spoiler-warning" style="background: #f0ebe0; border-left: 4px solid #c8973a; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #4a4540;">
+       ⚠️ <strong>Contains spoilers</strong> – We discuss plot details and the ending. If you haven't read the book or seen the film yet, you may want to do that first.
+     </div>
+   - If the page uses "{{MEDIA_LABEL}}" (e.g., "series" instead of "film"), adjust the wording accordingly: replace "film" with "series" or "show". Use context from the page.
+
+2. UPDATE AFFILIATE BUTTON TEXT
+   - Find the <a> element with class "buy-btn" inside the .panel-book section.
+   - Change its text content from "Buy the Book →" or "Buy the Book" to "Buy the Book (affiliate) →".
+   - Keep all other attributes (href, target, rel) unchanged.
+
+3. (OPTIONAL, BUT RECOMMENDED) VERIFY VERDICT BADGE
+   - Check the <span class="verdict-badge ..."> inside .meta-strip.
+   - Ensure the class matches the verdict text:
+        "Book Wins" → class includes "verdict-book"
+        "Movie Wins" → class includes "verdict-film"
+        "Too Close to Call" → class includes "verdict-tie"
+   - If incorrect, update the class to the correct one. Do not change the verdict text itself.
+
+4. PRESERVE EVERYTHING ELSE
+   - Do not change any other text, structure, classes, or formatting.
+   - Keep the existing <head>, meta tags, schema, and footer exactly as they are.
+
+Return the complete, corrected HTML file.
