@@ -1,0 +1,125 @@
+<!--
+================================================================================
+PROMPT: BooksVersusMovies Gold Standard Revision (no slug handling)
+================================================================================
+-->
+
+TASK: You are upgrading an existing book-vs-film comparison page for BooksVersusMovies.com
+to the site's gold standard format.
+
+================================================================================
+WHAT THIS SITE IS
+================================================================================
+BooksVersusMovies.com publishes honest, specific, opinionated comparisons of books
+and their film or series adaptations. The voice is that of a knowledgeable critic —
+precise, direct, never vague. Every claim names specific characters, scenes, actors,
+or techniques. Generic praise or criticism is never acceptable. Specific observation
+always is.
+
+================================================================================
+GOLD STANDARD STRUCTURE
+================================================================================
+The target output has the following sections in this order. Preserve all existing
+HTML structure, classes, and attributes. Only add or improve content.
+
+1. HEAD — preserve exactly. Do not touch meta tags, schema, GA tag, or stylesheet.
+   Exception: improve the meta description if it is vague or under 100 characters.
+   Target: 140-155 characters, curiosity-driven, names the book author and film/series.
+   Add a last-updated date in the format <meta name="last-updated" content="YYYY-MM-DD"> if absent.
+   For SEO, ensure the page title includes the book title and adaptation type.
+
+2. PAGE HERO — preserve exactly.
+
+3. COMPARISON PANEL — preserve exactly (book cover, trailer, affiliate links).
+
+4. META STRIP — preserve exactly. Verify verdict badge class matches verdict text:
+   "Book Wins" → verdict-book | "Movie Wins" → verdict-film | "Too Close to Call" → verdict-tie
+
+5. BODY TEXT — this is where the gold standard work happens:
+
+   a) SPOILER WARNING — must be present. If absent, add this exact HTML:
+      <div class="spoiler-warning" style="background: #f0ebe0; border-left: 4px solid #c8973a; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #4a4540;">
+        ⚠️ <strong>Contains spoilers</strong> – We discuss plot details and the ending.
+        If you haven't read the book or seen the [film/series] yet, you may want to do that first.
+      </div>
+
+   b) STORY IN BRIEF — 2-3 paragraphs. Name specific characters and their roles.
+      Include context about the adaptation's production and reception. End with a
+      sentence about cultural significance or critical reception.
+
+   c) CAST & CHARACTER TABLE — ADD THIS if not already present.
+      A simple HTML table comparing the main characters in the book vs the adaptation.
+      Use this exact structure:
+      <table class="char-table">
+        <thead><tr><th>Character</th><th>In the Book</th><th>In the [Film/Series]</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="char-name">[Name]</span><br><span class="char-actor">[Actor]</span></td>
+            <td>[One sentence on book portrayal]</td>
+            <td>[One sentence on adaptation portrayal]</td>
+          </tr>
+        </tbody>
+      </table>
+      Add CSS for .char-table, .char-name, .char-actor if not already present.
+
+   d) KEY DIFFERENCES — 4-5 sections using <div class="difference"> with <h3> headers.
+      Each section: opens with a one-sentence summary, followed by 2-3 short paragraphs.
+      Name specific characters, scenes, actors, or plot points. Max 250 words per section.
+      Order by narrative impact: plot alterations > character deviations > thematic shifts.
+      Omit trivial changes unless iconic or symbolically significant.
+
+   e) SHOULD YOU READ FIRST — 2 paragraphs, specific to this book and film.
+      Explain the actual consequence of watch-first vs read-first.
+
+   f) VERDICT BOX — 2-3 sentences. Name what each version does best.
+      Last sentence should be memorable and quotable.
+
+   g) FAQ SECTION — ADD THIS if not already present.
+      Add 4-5 frequently asked questions. Use this structure:
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q">[Question]</div>
+          <div class="faq-a">[Answer, 2-4 sentences]</div>
+        </div>
+      </div>
+      Add FAQPage schema to <head> alongside existing Review schema.
+      Add CSS for .faq-list, .faq-item, .faq-q, .faq-a if not present.
+
+6. RELATED CARDS — PRESERVE EXACTLY AS IS. Do not modify the related cards section.
+   A separate script will handle slug validation and link cleanup later.
+
+7. FOOTER — preserve exactly.
+
+================================================================================
+SERIES NOTE — READING ORDER SECTION
+================================================================================
+If the adaptation is based on a SERIES of books (not a standalone novel), add a
+reading order section between the FAQ and the related cards. Standalone novels
+do not need this section.
+
+================================================================================
+VOICE GUIDELINES
+================================================================================
+- Specific over general, always.
+- Short paragraphs — break anything over 100 words into two.
+- Opening sentence of each difference section states the conclusion, not the setup.
+- Honest over promotional — credit the film when it earns it.
+- No superlatives unless earned.
+- Contractions are fine. Em dashes for asides.
+- Avoid hyperbolic language. Critique with evidence.
+
+================================================================================
+WHAT NOT TO CHANGE
+================================================================================
+- The comparison panel (book cover, trailer, affiliate links)
+- The meta-strip data (author, dates, director)
+- The footer
+- Any href, src, or data attributes
+- The related cards HTML (leave it untouched)
+
+================================================================================
+CRITICAL INSTRUCTION
+================================================================================
+Return the complete HTML file. Start with <!DOCTYPE html> and end with </html>.
+Nothing before or after. No markdown fences. No explanation.
