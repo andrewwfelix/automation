@@ -13,7 +13,6 @@ Summary of changes:
 • Enhanced verdict box guidance with concrete examples of memorable closers
 • Added SEO improvements (last-updated meta tag, page title format guidance)
 • Strengthened voice guidelines with specific examples of evidence-based critique over hyperbole
-• REMOVED RELATED CARDS slug validation – now handled by a separate low‑cost script
 ================================================================================
 -->
 
@@ -159,10 +158,52 @@ HTML structure, classes, and attributes. Only add or improve content.
         .faq-a { font-size:0.9rem; color:var(--ink-light); line-height:1.65; }
       </style>
 
-6. RELATED CARDS — PRESERVE EXACTLY AS IS. Do not modify, add, remove, or reorder
-   any related card HTML. The calling script (or a separate post‑processing script)
-   will validate and clean up the slugs using a lower‑cost model. Your only job is
-   to leave the existing <div class="related-cards"> section unchanged.
+6. RELATED CARDS — preserve existing slugs only if they are in the valid slug list
+   below. Replace any invalid or self-referencing slugs with thematically appropriate
+   ones from the list. Convert slug to title case for anchor text.
+
+   VALID SLUGS (only use these):
+   a-knight-of-the-seven-kingdoms, a-little-life, a-man-called-ove,
+   a-walk-to-remember, about-a-boy, all-quiet-on-the-western-front,
+   all-the-light-we-cannot-see, along-came-a-spider, american-gods,
+   american-psycho, animal-farm, annihilation, atonement, band-of-brothers,
+   beloved, big-fish, big-little-lies, big-little-lies-hbo, breakfast-at-tiffanys,
+   bridgerton, brooklyn, catch-22, catch-me-if-you-can, cold-mountain, contact,
+   da-vinci-code, daisy-jones-and-the-six, dark-matter, devil-wears-prada,
+   divergent, doctor-sleep, dracula, dune, eat-pray-love, enders-game,
+   enders-game-film, english-patient, everything-everything, fight-club,
+   five-feet-apart, fourth-wing, frankenstein, geralds-game, girl-on-the-train,
+   girl-with-the-dragon-tattoo, gone-girl, gone-girl-2, good-omens, hamnet,
+   hannibal-series, heated-rivalry, high-fidelity, hillbilly-elegy,
+   hitchhikers-guide, howls-moving-castle, hunger-games-sunrise, i-am-legend,
+   i-robot, interview-with-the-vampire-amcplus, into-the-wild, it-ends-with-us,
+   it-muschietti, jane-eyre, jurassic-park, kite-runner, la-confidential,
+   les-miserables, little-women, lonesome-dove, looking-for-alaska,
+   lord-of-the-flies, love-simon, margos-got-money-troubles, me-before-you,
+   misery, my-brilliant-friend, my-sisters-keeper, narnia-magicians-nephew,
+   never-let-me-go, no-country-for-old-men, normal-people, of-mice-and-men,
+   olive-kitteridge, on-the-road, one-day, one-flew-over-the-cuckoos-nest,
+   outlander, pachinko, people-we-meet-on-vacation, perks-of-being-a-wallflower,
+   pet-sematary-2019, presumed-innocent, pride-and-prejudice, project-hail-mary,
+   ready-player-one, rebecca, remains-of-the-day, remarkably-bright-creatures,
+   reminders-of-him, room, roots-2016, rosemarys-baby, schindlers-list,
+   seabiscuit, sense-and-sensibility, shadow-and-bone, sharp-objects, shogun-2024,
+   silence-of-the-lambs, sophies-choice, sphere, stardust, station-eleven,
+   talented-mr-ripley, the-book-thief, the-client, the-color-purple,
+   the-count-of-monte-cristo, the-fault-in-our-stars, the-firm,
+   the-girl-with-the-dragon-tattoo-fincher, the-giver, the-glass-castle,
+   the-goldfinch, the-great-gatsby, the-handmaids-tale, the-hate-u-give,
+   the-haunting-of-hill-house, the-help, the-hours, the-housemaid,
+   the-lincoln-lawyer, the-longest-ride, the-lovely-bones, the-martian,
+   the-maze-runner, the-maze-runner-film, the-notebook, the-odyssey,
+   the-outsider, the-outsiders, the-pelican-brief, the-pianist,
+   the-picture-of-dorian-gray, the-pillars-of-the-earth, the-princess-bride,
+   the-road, the-secret-garden, the-secret-life-of-bees, the-shining,
+   the-sisterhood-of-the-traveling-pants, the-time-travelers-wife, the-witcher,
+   the-woman-in-the-window, thirteen-reasons-why, to-kill-a-mockingbird,
+   twilight, ugly-love, unbroken, verity, water-for-elephants,
+   where-the-crawdads-sing, white-noise, wild, wolf-hall, world-war-z,
+   wuthering-heights
 
 7. FOOTER — preserve exactly.
 
@@ -209,7 +250,6 @@ WHAT NOT TO CHANGE
 - The meta-strip data (author, dates, director)
 - The footer
 - Any href, src, or data attributes
-- The related cards HTML (leave it untouched)
 
 ================================================================================
 CRITICAL INSTRUCTION
@@ -221,4 +261,3 @@ The entire response is the raw HTML file.
 FINAL REMINDER: Begin your response immediately with <!DOCTYPE html>.
 
 Here is the HTML file to upgrade:
-[file content end]

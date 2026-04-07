@@ -1,0 +1,30 @@
+{
+  "paths": {
+    "revisePrompt": "revise-prompt-gold-standard-deep-seek.txt",
+    "spreadsheet": "next_movies.csv",
+    "outputDir": "next_movies"
+  },
+  "model": {
+    "active": "anthropic/claude-sonnet-4-5",
+    "alternatives": [
+      "anthropic/claude-3-5-haiku",
+      "deepseek/deepseek-chat",
+      "deepseek/deepseek-v3.2",
+      "google/gemini-2.0-flash-exp",
+      "google/gemini-2.5-flash-lite"
+    ]
+  },
+  "api": {
+    "maxTokens": 22000,
+    "timeoutSeconds": 180,
+    "siteUrl": "https://booksversusmovies.com"
+  },
+  "processing": {
+    "allRows": false
+  }
+}
+
+
+
+
+

@@ -1,22 +1,3 @@
-<!--
-================================================================================
-PROMPT REVISION HISTORY
-================================================================================
-Revision date: 2026-04-07
-Model used for final revision: Claude Sonnet 4.5
-
-Summary of changes:
-• Added explicit spoiler warning check instruction to prevent omissions
-• Streamlined FAQ questions to eliminate redundancy and improve search relevance
-• Added priority ordering for Key Differences (plot > character > theme) with guidance to omit trivial changes
-• Included CSS duplication check to prevent redundant style blocks
-• Enhanced verdict box guidance with concrete examples of memorable closers
-• Added SEO improvements (last-updated meta tag, page title format guidance)
-• Strengthened voice guidelines with specific examples of evidence-based critique over hyperbole
-• REMOVED RELATED CARDS slug validation – now handled by a separate low‑cost script
-================================================================================
--->
-
 TASK: You are upgrading an existing book-vs-film comparison page for BooksVersusMovies.com
 to the site's gold standard format.
 
@@ -40,8 +21,6 @@ HTML structure, classes, and attributes. Only add or improve content.
 1. HEAD — preserve exactly. Do not touch meta tags, schema, GA tag, or stylesheet.
    Exception: improve the meta description if it is vague or under 100 characters.
    Target: 140-155 characters, curiosity-driven, names the book author and film/series.
-   Add a last-updated date in the format <meta name="last-updated" content="YYYY-MM-DD"> if absent.
-   For SEO, ensure the page title includes the book title and adaptation type (e.g., "Book vs. Movie: [Book Title] Adaptation Review").
 
 2. PAGE HERO — preserve exactly.
 
@@ -52,7 +31,7 @@ HTML structure, classes, and attributes. Only add or improve content.
 
 5. BODY TEXT — this is where the gold standard work happens:
 
-   a) SPOILER WARNING — must be present. Check for an existing spoiler warning. If absent, add it verbatim:
+   a) SPOILER WARNING — must be present. If missing, add it:
       <div class="spoiler-warning" style="background: #f0ebe0; border-left: 4px solid #c8973a; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #4a4540;">
         ⚠️ <strong>Contains spoilers</strong> – We discuss plot details and the ending.
         If you haven't read the book or seen the [film/series] yet, you may want to
@@ -65,7 +44,6 @@ HTML structure, classes, and attributes. Only add or improve content.
 
    c) CAST & CHARACTER TABLE — ADD THIS if not already present.
       A simple HTML table comparing the main characters in the book vs the adaptation.
-      If the input lacks a cast table, insert it after 'STORY IN BRIEF' even if the adaptation is animated or minimally cast.
       Use this exact structure:
       <table class="char-table">
         <thead>
@@ -85,7 +63,6 @@ HTML structure, classes, and attributes. Only add or improve content.
           [Repeat for 3-5 principal characters]
         </tbody>
       </table>
-      Verify the stylesheet doesn't already include these rules. If duplicated, remove the redundant block.
       Add this CSS to the <head> <style> block if not already present:
       <style>
         .char-table { width:100%; border-collapse:collapse; margin:1.5rem 0 2rem; font-size:0.88rem; }
@@ -105,8 +82,6 @@ HTML structure, classes, and attributes. Only add or improve content.
       - Compares book and film directly — never generally
       - Max 250 words per section — shorter is better if the point is made
       - Break any paragraph over 100 words into two
-      - Order differences by narrative impact: plot alterations > character deviations > thematic shifts
-      - Omit trivial changes (e.g., costume colors, minor setting details) unless they are iconic or symbolically significant
 
    e) SHOULD YOU READ FIRST — 2 paragraphs, specific to THIS book and film.
       Explain the actual consequence of watch-first vs read-first for this title.
@@ -114,10 +89,6 @@ HTML structure, classes, and attributes. Only add or improve content.
 
    f) VERDICT BOX — 2-3 sentences. Name what each version does best. Match tone
       to verdict badge. Last sentence should be memorable — a closer worth quoting.
-      Examples of strong closers:
-      - 'The film's breathtaking visuals can't compensate for the book's gut-punch ending.'
-      - 'Read for the prose; watch for the performances—both are masterclasses.'
-      - 'The novel is a slow burn; the film is a controlled explosion—both hit their mark.'
 
    g) FAQ SECTION — ADD THIS if not already present.
       Add 4-5 frequently asked questions about this title. Use this structure:
@@ -129,11 +100,11 @@ HTML structure, classes, and attributes. Only add or improve content.
         </div>
       </div>
       Good FAQ questions for any adaptation page:
-      - Which version should I experience first—the book or the film—and why?
+      - Should I read [Title] before watching?
       - How faithful is the [film/series] to the book?
-      - What are the most controversial changes from the book?
-      - Is [Title] worth reading if I've already seen the [film/series]?
-      - [One question specific to this title — cast, availability, sequel, ending differences, etc.]
+      - What does the [film/series] change from the book?
+      - Is [Title] worth reading if I've seen the film?
+      - [One question specific to this title — cast, availability, sequel, etc.]
 
       Add FAQPage schema to the <head> alongside the existing Review schema:
       <script type="application/ld+json">
@@ -150,7 +121,7 @@ HTML structure, classes, and attributes. Only add or improve content.
       }
       </script>
 
-      Add this CSS to the <head> <style> block if not already present:
+      Add this CSS to the <head> <style> block:
       <style>
         .faq-list { margin:1.5rem 0 2rem; }
         .faq-item { border-bottom:1px solid var(--rule); padding:1.25rem 0; }
@@ -159,10 +130,52 @@ HTML structure, classes, and attributes. Only add or improve content.
         .faq-a { font-size:0.9rem; color:var(--ink-light); line-height:1.65; }
       </style>
 
-6. RELATED CARDS — PRESERVE EXACTLY AS IS. Do not modify, add, remove, or reorder
-   any related card HTML. The calling script (or a separate post‑processing script)
-   will validate and clean up the slugs using a lower‑cost model. Your only job is
-   to leave the existing <div class="related-cards"> section unchanged.
+6. RELATED CARDS — preserve existing slugs only if they are in the valid slug list
+   below. Replace any invalid or self-referencing slugs with thematically appropriate
+   ones from the list. Convert slug to title case for anchor text.
+
+   VALID SLUGS (only use these):
+   a-knight-of-the-seven-kingdoms, a-little-life, a-man-called-ove,
+   a-walk-to-remember, about-a-boy, all-quiet-on-the-western-front,
+   all-the-light-we-cannot-see, along-came-a-spider, american-gods,
+   american-psycho, animal-farm, annihilation, atonement, band-of-brothers,
+   beloved, big-fish, big-little-lies, big-little-lies-hbo, breakfast-at-tiffanys,
+   bridgerton, brooklyn, catch-22, catch-me-if-you-can, cold-mountain, contact,
+   da-vinci-code, daisy-jones-and-the-six, dark-matter, devil-wears-prada,
+   divergent, doctor-sleep, dracula, dune, eat-pray-love, enders-game,
+   enders-game-film, english-patient, everything-everything, fight-club,
+   five-feet-apart, fourth-wing, frankenstein, geralds-game, girl-on-the-train,
+   girl-with-the-dragon-tattoo, gone-girl, gone-girl-2, good-omens, hamnet,
+   hannibal-series, heated-rivalry, high-fidelity, hillbilly-elegy,
+   hitchhikers-guide, howls-moving-castle, hunger-games-sunrise, i-am-legend,
+   i-robot, interview-with-the-vampire-amcplus, into-the-wild, it-ends-with-us,
+   it-muschietti, jane-eyre, jurassic-park, kite-runner, la-confidential,
+   les-miserables, little-women, lonesome-dove, looking-for-alaska,
+   lord-of-the-flies, love-simon, margos-got-money-troubles, me-before-you,
+   misery, my-brilliant-friend, my-sisters-keeper, narnia-magicians-nephew,
+   never-let-me-go, no-country-for-old-men, normal-people, of-mice-and-men,
+   olive-kitteridge, on-the-road, one-day, one-flew-over-the-cuckoos-nest,
+   outlander, pachinko, people-we-meet-on-vacation, perks-of-being-a-wallflower,
+   pet-sematary-2019, presumed-innocent, pride-and-prejudice, project-hail-mary,
+   ready-player-one, rebecca, remains-of-the-day, remarkably-bright-creatures,
+   reminders-of-him, room, roots-2016, rosemarys-baby, schindlers-list,
+   seabiscuit, sense-and-sensibility, shadow-and-bone, sharp-objects, shogun-2024,
+   silence-of-the-lambs, sophies-choice, sphere, stardust, station-eleven,
+   talented-mr-ripley, the-book-thief, the-client, the-color-purple,
+   the-count-of-monte-cristo, the-fault-in-our-stars, the-firm,
+   the-girl-with-the-dragon-tattoo-fincher, the-giver, the-glass-castle,
+   the-goldfinch, the-great-gatsby, the-handmaids-tale, the-hate-u-give,
+   the-haunting-of-hill-house, the-help, the-hours, the-housemaid,
+   the-lincoln-lawyer, the-longest-ride, the-lovely-bones, the-martian,
+   the-maze-runner, the-maze-runner-film, the-notebook, the-odyssey,
+   the-outsider, the-outsiders, the-pelican-brief, the-pianist,
+   the-picture-of-dorian-gray, the-pillars-of-the-earth, the-princess-bride,
+   the-road, the-secret-garden, the-secret-life-of-bees, the-shining,
+   the-sisterhood-of-the-traveling-pants, the-time-travelers-wife, the-witcher,
+   the-woman-in-the-window, thirteen-reasons-why, to-kill-a-mockingbird,
+   twilight, ugly-love, unbroken, verity, water-for-elephants,
+   where-the-crawdads-sing, white-noise, wild, wolf-hall, world-war-z,
+   wuthering-heights
 
 7. FOOTER — preserve exactly.
 
@@ -200,7 +213,6 @@ VOICE GUIDELINES
 - No superlatives unless earned
 - Contractions are fine
 - Em dashes for asides
-- Avoid hyperbolic language ('worst adaptation ever', 'completely ruins'). Instead, critique with evidence: 'The film's rushed third act undermines the novel's nuanced climax' or 'Cutting the protagonist's internal monologue removes the moral ambiguity that defines the book'
 
 ================================================================================
 WHAT NOT TO CHANGE
@@ -209,7 +221,6 @@ WHAT NOT TO CHANGE
 - The meta-strip data (author, dates, director)
 - The footer
 - Any href, src, or data attributes
-- The related cards HTML (leave it untouched)
 
 ================================================================================
 CRITICAL INSTRUCTION
@@ -221,4 +232,3 @@ The entire response is the raw HTML file.
 FINAL REMINDER: Begin your response immediately with <!DOCTYPE html>.
 
 Here is the HTML file to upgrade:
-[file content end]

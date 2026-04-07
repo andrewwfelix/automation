@@ -10,16 +10,16 @@
     {
       "name": "grok",
       "displayName": "Grok (xAI)",
-      "openRouterId": "x-ai/grok-2-1212",
+      "openRouterId": "x-ai/grok-code-fast-1",
       "order": 2,
       "context": "Experimental. May have different refusal patterns."
     },
     {
       "name": "claude",
       "displayName": "Claude Opus 4.6",
-      "openRouterId": "anthropic/claude-3-opus-20240229",
+      "openRouterId": "anthropic/claude-sonnet-4-5",
       "order": 3,
-      "context": "Final reviewer. Best for strategic consolidation and nuanced advice."
+      "context": "Final reviewer. Best for strategic consolidation."
     }
   ]
 }

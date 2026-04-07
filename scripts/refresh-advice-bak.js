@@ -6,7 +6,7 @@
  * - For each model (DeepSeek, Grok, Claude), archive current advice.md
  * - Include the old advice in the prompt (so the model can build upon it)
  * - Save new advice to advice.md
- * - For Claude, also generate a separate next-steps.md file
+ * - For Claude, also archive and include previous consolidated-advice.md
  * 
  * Usage: node scripts/refresh-advice.js
  * 
@@ -15,6 +15,7 @@
  *   - .env with OPENROUTER_API_KEY
  */
 
+
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
@@ -22,13 +23,13 @@ const axios = require('axios');
 // ------------------------------------------------------------------
 // PATHS – use project root (one level above the script)
 // ------------------------------------------------------------------
-const PROJECT_ROOT = path.join(__dirname, '..');
+const PROJECT_ROOT = path.join(__dirname, '..');  // goes up from scripts/ to automation/
 const ADVICE_BASE = path.join(PROJECT_ROOT, 'docs', 'advice');
 const PROJECT_DIR = path.join(PROJECT_ROOT, 'docs', 'project');
 const LOG_DIR = path.join(PROJECT_ROOT, 'logs');
 const CONFIG_PATH = path.join(PROJECT_ROOT, 'config', 'advice-config.json');
 
-// Load .env from project root
+// Load .env from project root (not from scripts/config)
 require('dotenv').config({ path: path.join(PROJECT_ROOT, '.env') });
 
 const LOG_FILE = path.join(LOG_DIR, 'refresh-advice.log');
@@ -155,7 +156,7 @@ function buildConsolidationPrompt(deepseekAdvice, grokAdvice, oldConsolidated) {
     oldConsolidatedSection = `\n(This is the first time we are generating consolidated advice. Create a fresh synthesis.)\n`;
   }
 
-  return `You are Claude Sonnet 4.5, a final reviewer and consolidator.
+  return `You are Claude Opus 4.6, a final reviewer and consolidator.
 
 Below are two advice documents written by DeepSeek and Grok about themselves, for the same project (automating book vs film comparisons).
 
@@ -165,14 +166,12 @@ Your task: Read both, then produce a **consolidated advice document** that:
 - Adds your own Claude‑specific advice where missing (especially around system messages, refusal handling, and structured output).
 - Ends with a clear decision matrix: when to use DeepSeek, when to use Grok, when to use Claude.
 
-**After the consolidated advice, you MUST include a separate section titled '## Next Steps (Actionable)'** with three subsections:
-- **Immediate (this week)** – 3-5 concrete, high‑priority actions.
-- **Short‑term (next month)** – 3-5 actions.
-- **Long‑term / experiments** – 2-3 actions.
+Output the final document as markdown with the title:
+# Consolidated LLM Advice for BooksVsMovies
 
-Use bullet points. Be specific, actionable, and directly derived from the advice above.
+Use headings: ## Business Recommendations (cross‑model), ## Technical Recommendations, ## Decision Matrix, ## Final Verdict.
 
-Output the full response as raw markdown. No code fences. Start with "# Consolidated LLM Advice for BooksVsMovies".
+Be specific, actionable, and concise.
 
 Here is DeepSeek's advice:
 ---
@@ -183,7 +182,9 @@ Here is Grok's advice:
 ---
 ${grokAdvice}
 ---
-${oldConsolidatedSection}`;
+${oldConsolidatedSection}
+
+Output raw markdown. No code fences. Start immediately with "# Consolidated LLM Advice".`;
 }
 
 // ------------------------------------------------------------------
@@ -253,12 +254,11 @@ async function generateModelAdvice(apiKey, modelConfig, modelFolderPath) {
 }
 
 // ------------------------------------------------------------------
-// GENERATE CONSOLIDATED ADVICE (Claude) and extract Next Steps
+// GENERATE CONSOLIDATED ADVICE (Claude reads the freshly generated DeepSeek & Grok advice)
 // ------------------------------------------------------------------
-async function generateConsolidatedAdvice(apiKey, claudeModelConfig, deepseekFile, grokFile, consolidatedFile, nextStepsFile) {
+async function generateConsolidatedAdvice(apiKey, claudeModelConfig, deepseekFile, grokFile, consolidatedFile) {
   // 1. Archive existing consolidated advice
   archiveFile(consolidatedFile);
-  archiveFile(nextStepsFile); // also archive old next steps if exists
   
   // 2. Read old consolidated (if any)
   const oldConsolidated = readFileIfExists(consolidatedFile);
@@ -272,35 +272,12 @@ async function generateConsolidatedAdvice(apiKey, claudeModelConfig, deepseekFil
   
   // 5. Call Claude
   const systemMsg = 'You are a final reviewer. Output only raw markdown, no code fences.';
-  const response = await callModel(apiKey, claudeModelConfig.openRouterId, systemMsg, prompt, 10000, 0.2);
+  const consolidatedContent = await callModel(apiKey, claudeModelConfig.openRouterId, systemMsg, prompt, 8000, 0.2);
   
-  // 6. Split response into consolidated advice and next steps
-  let consolidatedContent = response;
-  let nextStepsContent = '';
-  
-  const nextStepsMatch = response.match(/## Next Steps \(Actionable\)[\s\S]*$/i);
-  if (nextStepsMatch) {
-    nextStepsContent = nextStepsMatch[0];
-    // Remove the next steps section from consolidated advice
-    consolidatedContent = response.replace(/## Next Steps \(Actionable\)[\s\S]*$/i, '').trim();
-    logToFile(`📌 Extracted Next Steps section (${nextStepsContent.length} chars)`);
-  } else {
-    logToFile('⚠️ Claude did not include a "## Next Steps (Actionable)" section. Next steps file will not be created.');
-  }
-  
-  // 7. Save consolidated advice
+  // 6. Write new consolidated advice
   ensureDir(path.dirname(consolidatedFile));
   fs.writeFileSync(consolidatedFile, consolidatedContent, 'utf8');
   logToFile(`💾 Saved new consolidated advice to ${consolidatedFile}`);
-  
-  // 8. Save next steps file (if content exists)
-  if (nextStepsContent) {
-    ensureDir(path.dirname(nextStepsFile));
-    fs.writeFileSync(nextStepsFile, nextStepsContent, 'utf8');
-    logToFile(`📋 Saved next steps to ${nextStepsFile}`);
-  } else {
-    logToFile(`⚠️ No next steps content – ${nextStepsFile} not updated.`);
-  }
 }
 
 // ------------------------------------------------------------------
@@ -330,7 +307,6 @@ async function main() {
   const deepseekPath = path.join(ADVICE_BASE, 'deepseek');
   const grokPath = path.join(ADVICE_BASE, 'grok');
   const consolidatedFile = path.join(PROJECT_DIR, 'consolidated-advice.md');
-  const nextStepsFile = path.join(PROJECT_DIR, 'next-steps.md');
   
   // Step 1: Generate DeepSeek advice (includes archiving and old advice)
   logToFile('--- Step 1: Generating DeepSeek advice ---');
@@ -340,17 +316,16 @@ async function main() {
   logToFile('--- Step 2: Generating Grok advice ---');
   await generateModelAdvice(apiKey, grokModel, grokPath);
   
-  // Step 3: Generate consolidated advice using Claude (includes archiving and next steps extraction)
+  // Step 3: Generate consolidated advice using Claude (includes archiving)
   logToFile('--- Step 3: Generating consolidated advice (Claude) ---');
   const deepseekAdviceFile = path.join(deepseekPath, 'advice.md');
   const grokAdviceFile = path.join(grokPath, 'advice.md');
-  await generateConsolidatedAdvice(apiKey, claudeModel, deepseekAdviceFile, grokAdviceFile, consolidatedFile, nextStepsFile);
+  await generateConsolidatedAdvice(apiKey, claudeModel, deepseekAdviceFile, grokAdviceFile, consolidatedFile);
   
   logToFile('✅ Orchestration complete. Files updated:');
   logToFile(`   - ${deepseekAdviceFile}`);
   logToFile(`   - ${grokAdviceFile}`);
   logToFile(`   - ${consolidatedFile}`);
-  logToFile(`   - ${nextStepsFile}`);
   logToFile(`   - Archived previous versions with date suffix in same folders.`);
 }
 
