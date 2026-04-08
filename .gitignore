@@ -11,9 +11,7 @@ movies.cfg
 # ============================================
 # Generated data (large, temporary, or output)
 # ============================================
-data/input/
-data/output/
-data/failures/
+data/
 analytics/
 temp/
 logs/

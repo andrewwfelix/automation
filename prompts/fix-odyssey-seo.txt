@@ -1,0 +1,93 @@
+Fix Odyssey SEO – Astro Project (REVISED)
+
+You are an expert in Astro, HTML, and SEO. Your task is to apply the following fixes to all .astro files in the **data/input/** directory of the Odyssey project. Do NOT modify the Layout component unless instructed. Do NOT change content or styling beyond what is listed.
+
+CRITICAL SYNTAX RULE FOR SCRIPT TAGS:
+- NEVER use self-closing syntax for <script> tags. Always use explicit opening and closing tags: <script> ... </script>.
+- If you need to inject JSON-LD, use this EXACT format:
+  <script type="application/ld+json">
+    {JSON.stringify({ ... })}
+  </script>
+- Do NOT use set:html on script tags – it is unnecessary and causes errors. Plain string interpolation works fine.
+
+Step 1: Delete Duplicate File (if present in data/input)
+Delete after-the-odyssey - Copy.astro from data/input/. It is an exact duplicate and causes duplicate content issues.
+
+Step 2: Change <h2> to <h1> on Every Page
+On every .astro page file, find <h2 class="section-title"> and replace with <h1 class="section-title">. Keep all other attributes and inner content identical.
+
+Step 3: Add Affiliate Disclosure to Missing Pages
+Add the following line inside <div class="section-body"> (near the bottom, before the final </div> or before <div class="further-reading"> if it exists) on every page that contains an affiliate link (<a class="book-affiliate">). Pages that already have <p class="affiliate-notice"> can be skipped.
+
+<p class="affiliate-notice">As an Amazon Associate, I earn from qualifying purchases.</p>
+
+Missing pages include (but are not limited to):
+- after-the-odyssey.astro
+- characters.astro
+- episodes.astro
+- how-to-read.astro
+- protagonists.astro
+- ref-themes.astro
+- synopsis.astro
+- themes.astro
+
+Step 4: Fix Image Alt Text and Add Lazy Loading
+For every <img> tag in all .astro files:
+- Add loading="lazy" attribute (EXCEPT for the hero image on index.astro which should have loading="eager" and fetchpriority="high" – keep as is).
+- Ensure alt attribute accurately describes the specific book cover or image. Do NOT use the same alt text for different books.
+
+Specific fixes needed:
+- In after-the-odyssey.astro:
+  - The first book entry is "The Iliad" but uses /images/cover-wilson-the-odyssey.jpg. Replace with correct Iliad cover image (you may need to add an actual Iliad cover file; if not available, remove the image or leave as placeholder with correct alt).
+  - The third book entry ("Metamorphoses") also uses the wrong image. Same fix.
+- In gift-guide.astro – the Folio Society limited edition has no image; that’s fine, but ensure any images present have alt text.
+
+Step 5: Add JSON-LD Structured Data to Every Page
+Add the following script tag in the **template section** of each .astro page (after the <Layout> opening tag, before the closing </Layout>). Do not put it inside the frontmatter.
+
+Use this EXACT syntax (no self-closing, no set:html):
+
+<script type="application/ld+json">
+  {JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "url": canonical,
+    "author": { "@type": "Person", "name": "André" },
+    "datePublished": "2025-01-15",
+    "dateModified": new Date().toISOString().split('T')[0],
+    "mainEntityOfPage": canonical
+  })}
+</script>
+
+For index.astro, use "@type": "WebSite" and add "name": "Reading the Odyssey".
+
+Step 6: Add Last-Updated Meta Tag
+In the <head> of every page (via Layout component if possible), add:
+<meta name="last-updated" content="2025-04-07" />
+
+Step 7: Add Open Graph / Twitter Card Meta Tags
+In the <head> of every page (via Layout component), add:
+
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="https://readingtheodyssey.com/images/og-default.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+
+Make sure og:image exists at that path or update to a real image URL.
+
+Step 8: Convert .sub-heading to Semantic Headings
+Replace <div class="sub-heading"> with <h3 class="sub-heading"> on all pages. If there are nested sub-headings, use <h4> accordingly. This improves accessibility and SEO.
+
+Step 9: Add Missing Alt Text for Trailer Thumbnail
+In before-the-nolan-film.astro, find the <img> inside .trailer-thumbnail and add:
+alt="Official trailer for Christopher Nolan's The Odyssey"
+Also add loading="lazy" to that image.
+
+Step 10: Verify Canonical Link Output
+Ensure your Layout.astro component outputs:
+<link rel="canonical" href={canonical} />
+If not present, add it inside <head>.

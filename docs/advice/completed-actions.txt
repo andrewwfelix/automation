@@ -1,0 +1,74 @@
+Completed Actions – April 7, 2026
+
+1. Updated several movies files with the new revide gold standard. prompt
+2. worked on an automation pipeline for processing movies and applying prompts in batch mode
+3. Details of the automation are as follows:
+
+
+
+1. Folder Structure Reorganization
+Before: Cluttered root with scripts, prompts, logs, and legacy folders intermixed.
+
+After: Clean, logical structure:
+
+text
+automation/
+├── analytics/search-console/2026-04-07/
+├── archive/               (legacy: augmented files, next_movies, other scripts)
+├── batch/                 (.bat aggregation scripts)
+├── config/                (.env, advice-config.json, movies-config.json.example)
+├── data/                  (input, output, failures – ignored)
+├── docs/
+│   ├── advice/            (claude/, deepseek/, grok/ with advice.md)
+│   └── project/           (objectives.md, next-steps.md, consolidated-advice.md)
+├── logs/                  (refresh-advice.log, etc.)
+├── prompts/               (all prompt templates)
+├── scripts/               (create-page.js, refresh-advice.js, revise-*.js)
+├── temp/                  (debug, scratch)
+└── utilities/             (helper scripts)
+2. Git & Secrets Management
+Created .gitignore to exclude: .env, config/*.cfg, data/, logs/, analytics/, node_modules/, temp/, *.log.
+Moved OpenRouter API key from movies.cfg to .env (project root).
+Removed leaked key from Git history via git commit --amend.
+Committed example config files (*.example) instead of real secrets.
+Successfully pushed clean repository to github.com/andrewwfelix/automation.
+
+3. Script Refactoring
+revise-batch.js – updated to:
+Read API key from .env (using dotenv).
+
+Use system message to force raw HTML output (stopped model refusals).
+Strip affiliate links for Claude models and restore after (optional).
+Support single file (--file) and dry‑run (--dry-run) modes.
+refresh-advice.js (new) – orchestrated advice generation:
+Calls DeepSeek → Grok → Claude sequentially.
+Archives previous advice before overwriting (advice-YYYY-MM-DD.md).
+Includes old advice in prompts for iterative improvement.
+Extracts Next Steps section from Claude’s output and saves as docs/project/next-steps.md.
+Writes logs to logs/refresh-advice.log.
+Uses PROJECT_ROOT constant so outputs go to root docs/ and logs/ (not inside scripts/).
+4. Configuration Files
+config/advice-config.json – defines models (DeepSeek, Grok, Claude) with order, OpenRouter IDs, and context notes.
+.env – contains OPENROUTER_API_KEY=sk-or-v1-... (ignored by Git).
+config/movies-config.json.example – template for main revision script.
+
+5. Advice Generation & Next Steps
+Successfully ran refresh-advice.js:
+DeepSeek generated advice (3600+ chars).
+Grok generated advice (5600+ chars).
+Claude produced consolidated advice (8800+ chars) including a “## Next Steps (Actionable)” section.
+Script automatically split the response into:
+docs/project/consolidated-advice.md (full advice without next steps)
+docs/project/next-steps.md (actionable todo list with immediate/short‑term/long‑term items)
+6. Documentation
+docs/project/objectives.md – mission, monetization, success metrics.
+docs/project/next-steps.md – now generated automatically.
+README.md (root) – setup, usage, folder structure (created earlier).
+.gitignore – finalised to exclude all generated and sensitive files.
+
+7. Testing & Validation
+Verified that .env is ignored and not committed.
+Ran refresh-advice.js successfully from project root (output correct paths).
+Checked that archived advice files are created (e.g., advice-2026-04-07.md).
+Confirmed that next-steps.md contains actionable bullet points.
+All goals for today accomplished: clean repository, secure secret handling, working orchestrated advice script, and automated next‑steps generation.

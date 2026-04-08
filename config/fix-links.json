@@ -1,0 +1,17 @@
+{
+  "paths": {
+    "brokenLinksCsv": "data/links/broken-links.csv",
+    "moviesDir": "C:\\Users\\andre\\projects\\movies",
+    "outputDir": "data/output",
+    "promptFile": "prompts/fix-broken-links.txt"
+  },
+  "mainRevision": {
+    "model": "deepseek/deepseek-chat",
+    "maxTokens": 4000,
+    "timeoutSeconds": 60,
+    "temperature": 0.1
+  },
+  "api": {
+    "siteUrl": "https://booksversusmovies.com"
+  }
+}

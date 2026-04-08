@@ -1,0 +1,26 @@
+You are given:
+1. A list of all valid HTML files that exist in the movies directory (each line starts with /). The very first file in this list is: FIRST_VALID_FILE.
+2. A CSV of broken internal links (columns: "file name", "link1", "link2", "link3", "status").
+
+Every link in the CSV is broken – the target file does NOT exist. Your task is to propose a corrected URL for each non‑empty link. Follow these rules IN ORDER:
+
+1. If the link is missing a leading slash, add it.
+2. Replace spaces with hyphens.
+3. Remove common prefixes like "the-" (e.g., "/the-handmaids-tale.html" -> "/handmaids-tale.html").
+4. Convert written numbers to digits (e.g., "/nineteen-eighty-four" -> "/1984").
+5. Ensure the link ends with ".html".
+6. After applying these transformations, check if the resulting path matches any file in the valid list. If it matches, use that path.
+7. If no match is found, use the FIRST_VALID_FILE from the list (the very first line).
+
+IMPORTANT: You MUST return a non‑empty corrected_link for every original_link. Never output an empty string. Never keep the original link unchanged – always apply the rules and, if necessary, fall back to FIRST_VALID_FILE.
+
+For each row in the CSV, output a JSON object with:
+{
+  "file": "source file name",
+  "original_links": ["link1", "link2", "link3"],
+  "corrected_links": ["corrected1", "corrected2", "corrected3"]
+}
+
+Return ONLY a JSON array. No explanations.
+
+=== List of valid HTML files ===

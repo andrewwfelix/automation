@@ -1,0 +1,14 @@
+{
+  "paths": {
+    "inputDir": "data/input",
+    "outputDir": "data/output",
+    "promptFile": "prompts/fix-oddysset-content.txt"
+  },
+  "ai": {
+    "enabled": true,
+    "provider": "openrouter",
+    "model": "anthropic/claude-sonnet-4-5",
+    "temperature": 0.2
+  },
+  "skipFiles": ["after-the-odyssey - Copy.astro"]
+}

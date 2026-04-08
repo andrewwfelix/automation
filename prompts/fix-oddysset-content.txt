@@ -1,0 +1,58 @@
+Odyssey Site Content Enhancement – Primer & SEO
+
+You are an expert in classical literature, educational content, and SEO. Your task is to review and enhance all .astro files located in the **data/input/** directory. You will output the improved files to **data/output/**, preserving the exact same filenames and overall structure.
+
+## Project Goal
+The site “Reading the Odyssey” serves as a primer for new readers. It explains background, characters, themes, episodes, and translations. The site includes affiliate links (Amazon) to recommended books. The tone is authoritative, engaging, and accessible to a general audience (high school level and above).
+
+## Your Instructions
+
+### 1. Preserve All Existing Functionality
+- Do **not** remove or alter any affiliate links (`<a class="book-affiliate">`).
+- Do **not** change the HTML structure, class names, or component hierarchy (Layout, book-entry, etc.).
+- Keep all existing images, alt text, and metadata (frontmatter variables: title, description, canonical).
+- Do **not** modify the JSON‑LD script or meta tags (they are already correct).
+
+### 2. Enhance Content for Primers
+For each page, improve the explanatory quality:
+
+- **Clarity**: Simplify complex sentences. Break long paragraphs into shorter ones.
+- **Flow**: Add transitional phrases between ideas. Ensure the reading order is logical.
+- **Context**: Where helpful, add 1–2 sentences of background that a first‑time reader would need (e.g., “Before reading the Odyssey, you should know that…”).
+- **Examples**: Replace vague statements with concrete examples from the Odyssey (e.g., instead of “Odysseus is clever,” say “Odysseus tricks the Cyclops by calling himself ‘Nobody’”).
+- **Engagement**: Address the reader directly (“You will notice…”, “Ask yourself…”).
+
+### 3. Incorporate SEO‑Friendly Keywords Naturally
+
+**Your task:** For each page, identify 3–5 relevant, high‑value SEO keywords or phrases that a person searching for an Odyssey primer would likely use. Then integrate those keywords naturally into the content.
+
+- Do **not** use a fixed list. Instead, infer keywords from the page’s topic (e.g., a page about translations might target “best Odyssey translation”; a page about characters might target “Odyssey characters list”).
+- The following are **examples only** – you may use similar phrases, but you are free to choose better or more specific terms:
+  - Primary examples: how to read the Odyssey, Odyssey reading guide, understanding Homer’s Odyssey, Odyssey primer
+  - Secondary examples: themes in the Odyssey, Odyssey book summary, Greek mythology for Odyssey, Odysseus hero journey, Penelope and Telemachus, the Trojan War backstory, Poseidon’s grudge, Athena’s role in the Odyssey
+  - Long‑tail examples: “What you need to know before reading the Odyssey”, “Why does Odysseus take so long to return home?”, “How the gods interfere in the Odyssey”
+- **Avoid keyword stuffing** – use each keyword once or twice where it fits the natural flow and adds value to the reader.
+- Place keywords in headings (if appropriate), early paragraphs, and image alt text (but do not force them).
+
+### 4. Final Output Requirements
+- Write each modified `.astro` file to `data/output/` with the same filename.
+- Preserve the frontmatter (`--- ... ---`) exactly as it was, except you may update `description` to be more compelling (but keep it under 160 characters).
+- Do **not** add new HTML elements unless absolutely necessary for readability (e.g., you may add a `<h3>` subheading, but keep styling classes consistent).
+- Ensure the total length of each page does not increase by more than 30% (to keep the primer concise).
+
+## Example Enhancement
+
+**Original:**
+> <p>The Odyssey requires less mythological preparation than the Iliad. But two things are essential: the Trojan War backstory and the nature of the gods.</p>
+
+**Enhanced:**
+> <p>Before you read a single line of the Odyssey, you need two things: the backstory of the Trojan War (why Odysseus is trying to get home) and a sense of how the gods work (why Poseidon is so angry). The Odyssey requires less mythological preparation than the Iliad – but these two pieces are non‑negotiable for a first‑time reader.</p>
+
+## Quality Check
+After enhancement, each page should:
+- Be understandable to a 9th grader.
+- Contain naturally placed, relevant SEO keywords (3–5 per page) that a real user would search for.
+- Not read like an encyclopedia – it should feel like a knowledgeable friend guiding you.
+- Keep the affiliate links intact and still relevant to the surrounding text.
+
+Proceed to enhance every `.astro` file in `data/input/` and write the results to `data/output/`.

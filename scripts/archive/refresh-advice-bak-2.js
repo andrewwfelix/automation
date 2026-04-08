@@ -4,7 +4,7 @@
  * 
  * Orchestrates advice generation with iterative improvement:
  * - For each model (DeepSeek, Grok, Claude), archive current advice.md
- * - Include the old advice AND completed-actions.txt in the prompt
+ * - Include the old advice in the prompt (so the model can build upon it)
  * - Save new advice to advice.md
  * - For Claude, also generate a separate next-steps.md file
  * 
@@ -89,23 +89,9 @@ function loadAdviceConfig() {
 }
 
 // ------------------------------------------------------------------
-// PROMPT TEMPLATES (with old advice + completed actions)
+// PROMPT TEMPLATES (with old advice included)
 // ------------------------------------------------------------------
-function buildAdvicePrompt(modelName, displayName, contextNotes, oldAdvice, completedActions) {
-  let completedActionsSection = '';
-  if (completedActions) {
-    completedActionsSection = `
-## Recently completed actions (for context)
-
-The following actions have already been performed. Do **not** suggest doing them again. Instead, build upon them, identify gaps, or propose next steps that go further.
-
-\`\`\`
-${completedActions}
-\`\`\`
-
-`;
-  }
-
+function buildAdvicePrompt(modelName, displayName, contextNotes, oldAdvice) {
   let oldAdviceSection = '';
   if (oldAdvice) {
     oldAdviceSection = `\n## Previous version of this advice (for reference)\n\nHere is the previous advice document for ${displayName}. Use it as a starting point, improve it, correct any outdated information, and add new insights. Do NOT simply repeat it; iterate and enhance.\n\n\`\`\`\n${oldAdvice}\n\`\`\`\n`;
@@ -114,8 +100,6 @@ ${completedActions}
   }
 
   return `You are ${displayName}. Write a practical advice document for a developer using you to automate book vs film comparison pages.
-
-${completedActionsSection}${oldAdviceSection}
 
 Follow this exact markdown structure:
 
@@ -158,6 +142,7 @@ Create a markdown table with:
 Sum up when and why to use this model.
 
 Additional context: ${contextNotes}
+${oldAdviceSection}
 
 Output raw markdown. Do NOT wrap in backticks or code fences. Start immediately with "# ${displayName} – Practical Advice".`;
 }
@@ -233,11 +218,10 @@ async function callModel(apiKey, modelId, systemMsg, userPrompt, maxTokens = 400
 }
 
 // ------------------------------------------------------------------
-// GENERATE ADVICE FOR A SINGLE MODEL (with archiving, old advice, and completed actions)
+// GENERATE ADVICE FOR A SINGLE MODEL (with archiving and old advice inclusion)
 // ------------------------------------------------------------------
 async function generateModelAdvice(apiKey, modelConfig, modelFolderPath) {
   const adviceFile = path.join(modelFolderPath, 'advice.md');
-  const actionsFile = path.join(modelFolderPath, 'completed-actions.txt');
   
   // 1. Archive existing advice if present
   archiveFile(adviceFile);
@@ -250,29 +234,19 @@ async function generateModelAdvice(apiKey, modelConfig, modelFolderPath) {
     logToFile(`🆕 No previous advice for ${modelConfig.displayName}, generating from scratch.`);
   }
   
-  // 3. Read completed actions (NEW)
-  let completedActions = null;
-  if (fs.existsSync(actionsFile)) {
-    completedActions = fs.readFileSync(actionsFile, 'utf8').trim();
-    logToFile(`📋 Loaded completed actions for ${modelConfig.displayName} (${completedActions.length} chars)`);
-  } else {
-    logToFile(`ℹ️ No completed-actions.txt found for ${modelConfig.displayName}`);
-  }
-  
-  // 4. Build prompt with old advice and completed actions
+  // 3. Build prompt with old advice
   const prompt = buildAdvicePrompt(
     modelConfig.name,
     modelConfig.displayName,
     modelConfig.context || '',
-    oldAdvice,
-    completedActions
+    oldAdvice
   );
   
-  // 5. Call model
+  // 4. Call model
   const systemMsg = 'You are a helpful assistant that outputs only raw markdown. No code fences, no explanations outside the markdown.';
   const adviceContent = await callModel(apiKey, modelConfig.openRouterId, systemMsg, prompt, 5000, 0.3);
   
-  // 6. Write new advice (overwrite)
+  // 5. Write new advice (overwrite)
   ensureDir(modelFolderPath);
   fs.writeFileSync(adviceFile, adviceContent, 'utf8');
   logToFile(`💾 Saved new advice to ${adviceFile}`);
@@ -307,6 +281,7 @@ async function generateConsolidatedAdvice(apiKey, claudeModelConfig, deepseekFil
   const nextStepsMatch = response.match(/## Next Steps \(Actionable\)[\s\S]*$/i);
   if (nextStepsMatch) {
     nextStepsContent = nextStepsMatch[0];
+    // Remove the next steps section from consolidated advice
     consolidatedContent = response.replace(/## Next Steps \(Actionable\)[\s\S]*$/i, '').trim();
     logToFile(`📌 Extracted Next Steps section (${nextStepsContent.length} chars)`);
   } else {
