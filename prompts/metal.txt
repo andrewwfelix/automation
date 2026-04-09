@@ -1,0 +1,309 @@
+You are an expert content writer specializing in metal detecting equipment and hobbyist guides, with deep knowledge of on-page SEO best practices.
+
+TASK: Generate a complete, standalone HTML document for a guide titled "{{title}}". The target audience is {{targetAudience}}. Use the primary keywords: {{keywords}}.
+
+REQUIREMENTS – HTML STRUCTURE:
+- Output a full HTML5 document starting with <!DOCTYPE html>.
+- Include <html lang="en">, <head>, and <body>.
+- In the <head>:
+  * Title tag: unique, 50–60 characters, primary keyword near the front, enticing for clicks.
+  * Meta description: 120–158 characters, includes primary keyword and value proposition.
+  * Meta viewport for responsiveness: <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  * Link to external stylesheet: <link rel="stylesheet" href="style.css"> (do not embed CSS).
+  * Optionally add a robots meta tag (index, follow).
+- In the <body>:
+  * Use exactly one <h1> – closely matching the title tag.
+  * Use logical heading hierarchy (h2, h3, h4) to outline content structure.
+  * Wrap the main content in <main> or a semantic container.
+  * Include breadcrumb navigation (simple HTML) to show page hierarchy.
+  * Add Schema.org structured data (JSON-LD) for Article or Product list (e.g., ItemList).
+  * Ensure all image placeholders include descriptive alt text (naturally incorporate keyword where appropriate).
+  * Use internal linking placeholders (e.g., <a href="/guides/beginners.html">beginner’s guide</a>) and external links to authoritative sources (e.g., Wikipedia article on metal detecting).
+  * Do not use inline styles – rely on classes (assume CSS is provided separately).
+
+CONTENT REQUIREMENTS:
+- Write in a friendly, authoritative, and scannable style.
+- Include an introductory paragraph (100–150 words) explaining what makes a good metal detector. Use primary keyword within first 100 words.
+- List exactly {{numProducts}} products. For each, provide:
+  * Product name as an <h3>.
+  * A 40–60 word description focusing on key features, best use case (coins, relics, gold, beach), and a unique selling point. Incorporate secondary keywords naturally.
+  * An image placeholder with descriptive file name and alt text: <img src="[IMAGE: product-name.jpg]" alt="[short description including keyword]">
+  * An Amazon affiliate link placeholder: <a href="[AFFILIATE: product-name]">Check price on Amazon</a>
+- {{#if includeBuyingGuide}} After the product list, add a "Buying Guide" section (200–250 words) as an <h2> section covering:
+  * VLF vs PI technology (with external link to an authoritative source)
+  * Frequency (single vs multi)
+  * Ground balancing
+  * Weight and ergonomics
+  * Budget tiers (under $300, $300-$700, $700+){{/if}}
+- {{#if includeComparisonTable}} Add a simple HTML comparison table with columns: Model, Best For, Frequency, Weight, Price Range. Use <thead>, <tbody>, and clean table markup.{{/if}}
+
+SEO & QUALITY REQUIREMENTS (all must be followed):
+1. Unique, descriptive title tag – 50–60 characters, primary keyword near front.
+2. Meta description – 120–158 characters, includes keyword and value proposition, drives CTR.
+3. One H1 per page – matches title tag topic.
+4. Logical heading hierarchy (H2, H3, H4) – outlines structure.
+5. Keyword-focused, natural content – target 1 primary + 2-3 secondary keywords; use in first 100 words, headings, and naturally throughout.
+6. High-quality, original content – substantially different from other pages; avoid thin content (total page text > 800 words).
+7. Internal linking – link to at least one internal placeholder page (e.g., "/best-gold-detectors") with descriptive anchor text.
+8. External links to authoritative sources – include at least one link to a reputable site (e.g., Wikipedia or a known industry authority).
+9. Image optimization – provide descriptive file names and alt text (include keyword naturally).
+10. Page load speed – no inline heavy resources; assume external CSS and optimized images.
+11. Mobile responsiveness – ensured via viewport tag and assuming CSS provides responsive design.
+12. Clear, crawlable site structure – breadcrumb navigation included.
+13. XML sitemap – not applicable in HTML, but note in comments.
+14. Robots.txt – not applicable, but add meta robots tag.
+15. HTTPS/SSL – not applicable in markup, but assume secure.
+16. Breadcrumb navigation – include a simple breadcrumb (<nav> with links).
+17. Schema markup (structured data) – include JSON-LD for Article or ItemList.
+18. Unique, valuable content – no duplicate text.
+19. User engagement signals – achieve via compelling content and internal links.
+20. Regular content updates – add a small "Last updated" date line (e.g., <p class="last-updated">Last updated: March 2026</p>).
+
+FORMAT: Return only the complete HTML document. Do not include any commentary outside the HTML. Use indentation and semantic HTML5. Do not use markdown.
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Best Overall Metal Detectors 2026: Top Rated All-Terrain Models</title>
+    <meta name="description" content="Find the best metal detector overall for 2026. Our top-rated, all-around picks excel in any terrain—from parks to beaches. Expert-tested recommendations for serious hobbyists seeking unbeatable performance and value.">
+    <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Best Overall Metal Detectors 2026",
+        "description": "Top rated all-around metal detectors for any terrain in 2026.",
+        "numberOfItems": 6,
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                    "@type": "Product",
+                    "name": "Minelab Equinox 900",
+                    "description": "Simultaneous multi-frequency detector for all terrains.",
+                    "url": "[AFFILIATE: minelab-equinox-900]"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                    "@type": "Product",
+                    "name": "Garrett AT Max",
+                    "description": "Rugged all-terrain detector with Z-Lynk wireless audio.",
+                    "url": "[AFFILIATE: garrett-at-max]"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                    "@type": "Product",
+                    "name": "Nokta Legend",
+                    "description": "Feature-rich multi-frequency detector at outstanding value.",
+                    "url": "[AFFILIATE: nokta-legend]"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 4,
+                "item": {
+                    "@type": "Product",
+                    "name": "XP Deus 2",
+                    "description": "Ultra-lightweight wireless detector with fast multi-frequency technology.",
+                    "url": "[AFFILIATE: xp-deus-2]"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 5,
+                "item": {
+                    "@type": "Product",
+                    "name": "Minelab Manticore",
+                    "description": "Premium multi-IQ+ detector with 2D target visualization.",
+                    "url": "[AFFILIATE: minelab-manticore]"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 6,
+                "item": {
+                    "@type": "Product",
+                    "name": "Fisher F75+",
+                    "description": "Deep-seeking single-frequency detector with exceptional relic sensitivity.",
+                    "url": "[AFFILIATE: fisher-f75-plus]"
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+<body>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="/">Home</a></li>
+            <li><a href="/guides">Buying Guides</a></li>
+            <li><a href="/metal-detectors">Metal Detectors</a></li>
+            <li aria-current="page">Best Overall Metal Detectors 2026</li>
+        </ol>
+    </nav>
+
+    <main class="guide-container">
+        <header class="guide-header">
+            <h1>Best Overall Metal Detectors 2026 – Top Rated Models for Any Terrain</h1>
+            <p class="last-updated">Last updated: March 2026</p>
+        </header>
+
+        <p class="intro">Choosing the <strong>best metal detector overall</strong> means finding a versatile machine you can confidently take from a trash-laden park to a mineralized beach and still pull deep, clear signals. In 2026, the <strong>top rated metal detectors</strong> stand out for their multi-frequency operation, waterproofing, precise discrimination, and ergonomic design. A great <strong>best all around metal detector</strong> balances advanced technology with user-friendly features—excellent ground balancing to handle tough soil, lightweight construction for long hunts, and accurate target ID to minimize digging junk. Whether you're chasing modern coins, historic relics, or elusive gold, our six picks have been evaluated across diverse terrains to crown the true champions. Dive in to find your perfect match.</p>
+
+        <section class="product-listings">
+            <h2>Our Top 6 Best Overall Metal Detectors for 2026</h2>
+
+            <article class="product-item">
+                <h3>1. Minelab Equinox 900</h3>
+                <img src="[IMAGE: minelab-equinox-900.jpg]" alt="Minelab Equinox 900 multi-frequency metal detector for all terrains">
+                <p>The Minelab Equinox 900 refines the legendary Multi-IQ platform with simultaneous multi-frequency operation (5, 10, 15, 20, 40 kHz plus Multi), delivering pinpoint accuracy on coins, relics, and gold in virtually any soil type. Waterproof to 5 meters (about 16 ft), it transitions seamlessly from dry fields to underwater hunts. Its <strong>key selling point</strong> is the enhanced Gold Mode for sub-gram nuggets in mineralized ground, combined with Bluetooth audio and a fast recovery speed that separates good targets from trash. Weighing approximately 2.8 lbs, this is arguably the <strong>best all around metal detector</strong> for the serious hobbyist who refuses to compromise.</p>
+                <p><a class="affiliate-button" href="[AFFILIATE: minelab-equinox-900]">Check price on Amazon</a></p>
+            </article>
+
+            <article class="product-item">
+                <h3>2. Garrett AT Max</h3>
+                <img src="[IMAGE: garrett-at-max.jpg]" alt="Garrett AT Max all-terrain metal detector for relics and coins">
+                <p>The Garrett AT Max is a proven <strong>best all around metal detector</strong> built on a reliable 13.6 kHz single-frequency platform with enhanced iron audio and adjustable depth sensitivity. It excels at separating relics and coins in trashy, iron-laden sites and is fully submersible to 3 meters (about 10 ft). Its <strong>key selling point</strong> is the built-in Z-Lynk wireless technology for lag-free audio through compatible headphones, plus true all-terrain ruggedness. At roughly 3.0 lbs, it's a dependable workhorse for fields, parks, and saltwater beaches alike.</p>
+                <p><a class="affiliate-button" href="[AFFILIATE: garrett-at-max]">Check price on Amazon</a></p>
+            </article>
+
+            <article class="product-item">
+                <h3>3. Nokta Legend</h3>
+                <img src="[IMAGE: nokta-legend.jpg]" alt="Nokta Legend multi-frequency metal detector with waterproof design">
+                <p>The Nokta Legend redefines value among <strong>top rated metal detectors</strong> with simultaneous multi-frequency (SMF) technology across multiple frequencies up to 40 kHz, vibration feedback for silent hunting, and built-in wireless module. It excels at coin shooting, jewelry recovery, and relic hunting in mineralized ground. Its <strong>key selling point</strong> is exceptional capability per dollar: you get pro-level multi-frequency performance, IP68 waterproofing (up to 3 meters), and online firmware updates in a package that undercuts the competition. At approximately 2.9 lbs, it's lightweight enough for all-day adventures.</p>
+                <p><a class="affiliate-button" href="[AFFILIATE: nokta-legend]">Check price on Amazon</a></p>
+            </article>
+
+            <article class="product-item">
+                <h3>4. XP Deus 2</h3>
+                <img src="[IMAGE: xp-deus-2.jpg]" alt="XP Deus 2 ultra-lightweight wireless metal detector">
+                <p>For detectorists who prize speed and minimal fatigue, the fully wireless XP Deus 2 is in a class of its own. Its Fast Multi-Frequency (FMF) technology spans roughly 4–45 kHz, providing blazing-fast recovery in iron-infested relic sites and stable performance on saltwater beaches. Waterproof to 6 meters (about 20 ft), it doubles as a serious underwater detector. The <strong>key selling point</strong> is its modular, ultra-lightweight design—the coil-and-stem assembly weighs under 2 lbs (roughly 1.8 lbs)—paired with optional bone-conduction headphones for a completely cable-free experience. Ideal for long sessions across varied terrains.</p>
+                <p><a class="affiliate-button" href="[AFFILIATE: xp-deus-2]">Check price on Amazon</a></p>
+            </article>
+
+            <article class="product-item">
+                <h3>5. Minelab Manticore</h3>
+                <img src="[IMAGE: minelab-manticore.jpg]" alt="Minelab Manticore advanced multi-IQ+ metal detector with color display">
+                <p>The Minelab Manticore represents the pinnacle of Minelab's Multi-IQ+ simultaneous multi-frequency technology, engineered for unmatched target separation in the most challenging iron-infested environments. It handles coins, relics, jewelry, and beach gold with equal authority. Its <strong>key selling point</strong> is the 2D target trace visualization on a high-resolution color screen, giving you real-time ferrous and conductive data to make confident dig decisions. Waterproof to 5 meters and weighing about 3.0 lbs, it's the premium choice for experienced detectorists tackling complex sites.</p>
+                <p><a class="affiliate-button" href="[AFFILIATE: minelab-manticore]">Check price on Amazon</a></p>
+            </article>
+
+            <article class="product-item">
+                <h3>6. Fisher F75+</h3>
+                <img src="[IMAGE: fisher-f75-plus.jpg]" alt="Fisher F75+ metal detector for deep relics and coin hunting">
+                <p>A legend in relic-rich soil, the Fisher F75+ delivers phenomenal sensitivity and raw depth on a 13 kHz single-frequency platform with a fast recovery speed and manual ground-grab balancing. It excels at sorting through nail-filled cellar holes to find buttons, coins, and deep silver. Its <strong>key selling point</strong> is the trigger-actuated pinpoint mode for precise target recovery, combined with a lightweight build (approximately 3.5 lbs with standard coil) that belies its deep-seeking power. A specialist that doubles as a capable <strong>all-around</strong> performer for field enthusiasts.</p>
+                <p><a class="affiliate-button" href="[AFFILIATE: fisher-f75-plus]">Check price on Amazon</a></p>
+            </article>
+        </section>
+
+        <section class="buying-guide">
+            <h2>Buying Guide: How to Choose the Best All Around Metal Detector</h2>
+
+            <h3>VLF vs. PI Technology</h3>
+            <p>Understanding core technologies is the first step to picking the right <strong>best metal detector overall</strong>. Most versatile detectors use Very Low Frequency (VLF) technology, which employs a transmit-and-receive coil pair to discriminate between metals—crucial for avoiding trash. Pulse Induction (PI) detectors ignore ground mineralization and achieve greater depth, making them ideal for <a href="/best-gold-detectors">gold prospecting</a> and saltwater beaches, but they generally lack discrimination. For an all-purpose machine, a modern VLF or multi-frequency VLF is the way to go. For a deeper technical overview, see the <a href="https://en.wikipedia.org/wiki/Metal_detector" rel="noopener" target="_blank">Wikipedia article on metal detectors</a>.</p>
+
+            <h3>Frequency Matters</h3>
+            <p>Single-frequency detectors (e.g., 13–15 kHz) are straightforward and effective for general coin and relic hunting but can struggle in highly mineralized ground or saltwater. Multi-frequency detectors—like the Multi-IQ, SMF, and FMF systems in our top picks—transmit multiple frequencies simultaneously. This provides stable, accurate performance across different soil conditions and target types, making them the <strong>top rated metal detector</strong> choice for true all-terrain adaptability.</p>
+
+            <h3>Ground Balancing</h3>
+            <p>Ground balancing cancels out false signals caused by mineralized soil. Automatic ground balance is convenient for most conditions; manual or tracking modes give experienced users finer control in highly variable terrain. Always prioritize a detector that offers at least automatic ground balancing.</p>
+
+            <h3>Ergonomics &amp; Weight</h3>
+            <p>A machine that feels heavy after 30 minutes will cut your hunts short. Aim for a detector under 3.5 lbs with a padded armrest, adjustable shaft, and good balance point. S-shaped and straight-shaft designs suit different body types—try before you buy if possible.</p>
+
+            <h3>Budget Tiers</h3>
+            <ul>
+                <li><strong>Under $300:</strong> Capable entry-level VLF detectors. Good for parks and learning the hobby.</li>
+                <li><strong>$300–$700:</strong> The sweet spot—advanced multi-frequency models with waterproofing and wireless audio.</li>
+                <li><strong>$700+:</strong> Premium flagships with maximum depth, fastest recovery, wireless systems, and pro-level features.</li>
+            </ul>
+            <p>The <strong>best all around metal detector</strong> for you balances the technology you need with a comfort level that keeps you swinging longer. For newcomers, start with our <a href="/guides/beginners.html">beginner's guide to metal detecting</a>.</p>
+        </section>
+
+        <section class="comparison-section">
+            <h2>Quick Comparison: Best Overall Metal Detectors 2026</h2>
+            <div class="table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Model</th>
+                            <th scope="col">Best For</th>
+                            <th scope="col">Frequency</th>
+                            <th scope="col">Weight</th>
+                            <th scope="col">Waterproof</th>
+                            <th scope="col">Price Range</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Minelab Equinox 900</strong></td>
+                            <td>All Terrain, Coins, Gold</td>
+                            <td>Multi-IQ (5–40 kHz)</td>
+                            <td>2.8 lbs</td>
+                            <td>5 m / 16 ft</td>
+                            <td>$900+</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Garrett AT Max</strong></td>
+                            <td>Relics, Coins, All Terrain</td>
+                            <td>Single (13.6 kHz)</td>
+                            <td>3.0 lbs</td>
+                            <td>3 m / 10 ft</td>
+                            <td>$700–$800</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nokta Legend</strong></td>
+                            <td>All-Terrain Value</td>
+                            <td>Multi SMF (up to 40 kHz)</td>
+                            <td>2.9 lbs</td>
+                            <td>3 m / 10 ft</td>
+                            <td>$500–$700</td>
+                        </tr>
+                        <tr>
+                            <td><strong>XP Deus 2</strong></td>
+                            <td>Relics, Fast Recovery, Beach</td>
+                            <td>Multi FMF (4–45 kHz)</td>
+                            <td>~1.8 lbs (stem + coil)</td>
+                            <td>6 m / 20 ft</td>
+                            <td>$1,200+</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Minelab Manticore</strong></td>
+                            <td>Iron Sites, Coins, Beach</td>
+                            <td>Multi-IQ+</td>
+                            <td>3.0 lbs</td>
+                            <td>5 m / 16 ft</td>
+                            <td>$1,300+</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fisher F75+</strong></td>
+                            <td>Deep Relics &amp; Coins</td>
+                            <td>Single (13 kHz)</td>
+                            <td>3.5 lbs</td>
+                            <td>Control box: No</td>
+                            <td>$700–$800</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="conclusion">
+            <h2>Final Thoughts</h2>
+            <p>Your perfect detecting partner is on this list. Whether you prioritize cutting-edge multi-frequency technology, wireless freedom, deep-seeking power, or the most performance for your budget, our 2026 selection of the <strong>best overall metal detectors</strong> has a model that will excel on your chosen terrain. Remember: the best detector is the one you use most often. Consider your primary hunting grounds, physical comfort, and must-have features—then get out there and start swinging. Happy hunting!</p>
+        </section>
+    </main>
+</body>
+</html>

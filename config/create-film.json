@@ -1,0 +1,17 @@
+{
+  "paths": {
+    "revisePrompt": "prompts/create-film.txt",
+    "inputDir": "data/input",
+    "finalDir": "data/final"
+  },
+  "mainRevision": {
+    "model": "anthropic/claude-sonnet-4-5",
+    "maxTokens": 22000,
+    "timeoutSeconds": 180,
+    "temperature": 0.1,
+    "stripAffiliateLinks": true
+  },
+  "api": {
+    "siteUrl": "https://booksversusmovies.com"
+  }
+}

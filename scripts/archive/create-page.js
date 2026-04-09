@@ -1,26 +1,24 @@
 #!/usr/bin/env node
 /**
  * BooksVersusMovies.com — Page Generator
- * Reads config from ../config/movies.cfg, prompt from prompt.txt,
- * picks the next unbuilt row(s) from a CSV (where status is blank or not PROCESSED),
- * generates complete HTML comparison pages via OpenRouter,
- * and writes PROCESSED or ERROR:<message> back to the status column.
+ * Reads config from movies.cfg, prompt from prompt.txt,
+ * picks the next unbuilt row(s) from a CSV, generates complete
+ * HTML comparison pages via OpenRouter, and writes SUCCESS or
+ * ERROR:<message> back to the status column in the CSV.
  *
  * Usage:
- *   node create-page.js                  # generate next unbuilt page (or all if ALL_ROWS=true)
- *   node create-page.js --row 3          # generate specific row number (1-indexed, excludes header)
- *   node create-page.js --all            # process all unbuilt rows regardless of ALL_ROWS setting
- *   node create-page.js --dry-run        # show row info without calling API
+ *   node generate-page.js                  # generate next unbuilt page (or all if ALL_ROWS=true)
+ *   node generate-page.js --row 3          # generate specific row number (1-indexed, excludes header)
+ *   node generate-page.js --all            # process all unbuilt rows regardless of ALL_ROWS setting
+ *   node generate-page.js --dry-run        # show row info without calling API
  *
- * Config (../config/movies.cfg):
+ * Config (movies.cfg):
  *   ALL_ROWS=true    process all unbuilt rows in one run
  *   ALL_ROWS=false   process only the next single unbuilt row (default)
  *
- * Environment (../config/.env):
- *   OPENROUTER_API_KEY=sk-or-v1-...
- *
  * Requirements:
- *   npm install axios dotenv
+ *   npm install axios
+ *   (no xlsx needed — reads CSV natively)
  *
  * Log file: generate-page.log (same directory as this script)
  */
@@ -28,29 +26,13 @@
 const fs    = require('fs');
 const path  = require('path');
 const axios = require('axios');
-const dotenv = require('dotenv');
-
-// ------------------------------------------------------------------ //
-// PATHS
-// ------------------------------------------------------------------ //
-const scriptDir = path.dirname(path.resolve(process.argv[1]));
-const projectRoot = path.join(scriptDir, '..');           // automation/
-const configDir   = path.join(projectRoot, 'config');     // automation/config/
-const cfgPath     = path.join(configDir, 'movies.cfg');   // automation/config/movies.cfg
-const envPath     = path.join(configDir, '.env');         // automation/config/.env
-
-// Load .env file
-if (fs.existsSync(envPath)) {
-  dotenv.config({ path: envPath });
-} else {
-  console.warn(`Warning: .env file not found at ${envPath}`);
-}
-
-const LOG_FILE  = path.join(scriptDir, 'generate-page.log');
 
 // ------------------------------------------------------------------ //
 // LOGGER
 // ------------------------------------------------------------------ //
+const scriptDir = path.dirname(path.resolve(process.argv[1]));
+const LOG_FILE  = path.join(scriptDir, 'generate-page.log');
+
 function timestamp() {
   return new Date().toISOString().replace('T', ' ').slice(0, 19);
 }
@@ -79,12 +61,12 @@ function logSection(title) {
 }
 
 // ------------------------------------------------------------------ //
-// LOAD CONFIG (from ../config/movies.cfg)
+// LOAD CONFIG
 // ------------------------------------------------------------------ //
 function loadConfig(cfgPath) {
   if (!fs.existsSync(cfgPath)) {
     logError(`Config file not found: ${cfgPath}`);
-    logError('Expected location: automation/config/movies.cfg');
+    logError('Create a movies.cfg file next to this script.');
     process.exit(1);
   }
 
@@ -95,16 +77,13 @@ function loadConfig(cfgPath) {
     if (!trimmed || trimmed.startsWith('#')) continue;
     const eqIndex = trimmed.indexOf('=');
     if (eqIndex === -1) continue;
-    const key = trimmed.slice(0, eqIndex).trim();
-    const val = trimmed.slice(eqIndex + 1).trim();
-    cfg[key] = val;
+    cfg[trimmed.slice(0, eqIndex).trim()] = trimmed.slice(eqIndex + 1).trim();
   }
 
-  // Required keys (API key is now from .env, not here)
-  const required = ['SPREADSHEET_PATH', 'OUTPUT_DIR', 'PROMPT_FILE', 'MODEL'];
+  const required = ['OPENROUTER_API_KEY', 'SPREADSHEET_PATH', 'OUTPUT_DIR', 'PROMPT_FILE', 'MODEL'];
   for (const key of required) {
     if (!cfg[key]) {
-      logError(`Missing required config key: ${key} in ${cfgPath}`);
+      logError(`Missing required config key: ${key}`);
       process.exit(1);
     }
   }
@@ -181,14 +160,14 @@ function parseCSV(filePath) {
 
 // ------------------------------------------------------------------ //
 // WRITE STATUS BACK TO CSV
-// Sets status to "PROCESSED" on success, or "ERROR: <message>" on failure.
-// Also adds process_date and process_model columns.
+// Writes SUCCESS or ERROR:<message> into the "status" column for the
+// matching row (matched by slug), adding the column if it doesn't exist.
 // ------------------------------------------------------------------ //
 function writeStatus(csvPath, slug, statusValue, model) {
   try {
     const { headers, rows } = parseCSV(csvPath);
 
-    // Ensure required columns exist
+    // Ensure columns exist
     if (!headers.includes('process_date'))  headers.push('process_date');
     if (!headers.includes('process_model')) headers.push('process_model');
     if (!headers.includes('status'))        headers.push('status');
@@ -203,6 +182,7 @@ function writeStatus(csvPath, slug, statusValue, model) {
       }
     }
 
+    // Rebuild CSV
     const escapeField = (val) => {
       const s = String(val || '');
       return s.includes(',') || s.includes('"') || s.includes('\n')
@@ -219,13 +199,14 @@ function writeStatus(csvPath, slug, statusValue, model) {
     log(`   CSV status updated: ${slug} → ${statusValue}`);
   } catch (err) {
     logError(`Failed to write status to CSV: ${err.message}`);
+    // Non-fatal — don't exit, the HTML was already saved successfully
   }
 }
 
 // ------------------------------------------------------------------ //
-// FIND NEXT ROW TO PROCESS
-// Only includes rows where status is blank (empty, undefined, or "PENDING")
-// and the output HTML file does not already exist.
+// FIND NEXT UNBUILT ROW
+// Skips rows that: already have SUCCESS status, already have an html
+// file, or are missing required data.
 // ------------------------------------------------------------------ //
 function findNextRow(rows, outputDir, specificRow = null) {
   if (specificRow !== null) {
@@ -243,30 +224,16 @@ function findNextRow(rows, outputDir, specificRow = null) {
 
     const outputPath   = path.join(outputDir, `${row.slug}.html`);
     const alreadyBuilt = fs.existsSync(outputPath);
-    const statusVal    = (row.status || '').trim();
-    const alreadyDone  = statusVal === 'PROCESSED';
-    const hasBadData   = !row.trailer_url ||
+    const alreadyOk    = (row.status || '').toUpperCase() === 'SUCCESS';
+    const hasBadData   = !row.affiliate_link || !row.trailer_url ||
                          String(row.film_year) === 'TBD' || row.director === 'TBD';
 
-    if (alreadyBuilt && alreadyDone) {
-      log(`   Skipping row ${i + 1} (${row.title}) — already processed and file exists`);
-      continue;
-    }
-    if (alreadyDone && !alreadyBuilt) {
-      // Status says PROCESSED but file missing – allow reprocessing (optional)
-      log(`   ⚠️ Row ${i + 1} (${row.title}) status is PROCESSED but HTML missing. Will reprocess.`);
-    }
-    if (statusVal && statusVal !== 'PROCESSED' && !statusVal.startsWith('ERROR')) {
-      // If status has some other value (e.g., "PENDING", "SKIP", etc.) treat as not processed
-      // Continue to allow processing
-    }
-    if (statusVal === 'PROCESSED' && !alreadyBuilt) {
-      // reprocess
-    } else if (statusVal === 'PROCESSED' && alreadyBuilt) {
+    if (alreadyBuilt || alreadyOk) {
+      log(`   Skipping row ${i + 1} (${row.title}) — already built`);
       continue;
     }
     if (hasBadData) {
-      log(`   ⚠️  Skipping row ${i + 1} (${row.title}) — missing trailer_url, or TBD year/director`);
+      log(`   ⚠️  Skipping row ${i + 1} (${row.title}) — missing affiliate_link, trailer_url, or TBD year`);
       continue;
     }
 
@@ -315,10 +282,12 @@ async function validateYoutubeThumbnail(youtubeId, title) {
 
     if (!contentType.startsWith('image/')) {
       logError(`Thumbnail did not return an image (content-type: ${contentType})`);
+      logError(`Video may be private, deleted, or ID is wrong: ${youtubeId}`);
       return false;
     }
     if (contentLength > 0 && contentLength < 5000) {
       logError(`Thumbnail is a placeholder (${contentLength} bytes) — video has no maxresdefault`);
+      logError(`Verify: ${thumbUrl}`);
       return false;
     }
 
@@ -326,6 +295,7 @@ async function validateYoutubeThumbnail(youtubeId, title) {
     return true;
   } catch (err) {
     logError(`Could not reach thumbnail: ${err.message}`);
+    logError(`URL: ${thumbUrl}`);
     return false;
   }
 }
@@ -348,7 +318,7 @@ function buildPrompt(template, row) {
     IMAGE:          row.image          || '',
     SLUG:           row.slug           || '',
     MEDIA_LABEL:    detectMediaLabel(row),
-    VERDICT_CLASS:  verdictClass(row.verdict),
+    VERDICT_CLASS:       verdictClass(row.verdict),
     VIDEO_AFFILIATE_LINK: row.video_affiliate_link || '',
   };
 
@@ -362,7 +332,7 @@ function buildPrompt(template, row) {
 // ------------------------------------------------------------------ //
 // CALL OPENROUTER
 // ------------------------------------------------------------------ //
-async function callOpenRouter(cfg, prompt, apiKey) {
+async function callOpenRouter(cfg, prompt) {
   const startTime = Date.now();
   const timeoutMs = parseInt(cfg.TIMEOUT_SECONDS || '120', 10) * 1000;
   const maxTokens = parseInt(cfg.MAX_TOKENS || '4000', 10);
@@ -382,7 +352,7 @@ async function callOpenRouter(cfg, prompt, apiKey) {
       {
         timeout: timeoutMs,
         headers: {
-          'Authorization': `Bearer ${apiKey}`,
+          'Authorization': `Bearer ${cfg.OPENROUTER_API_KEY}`,
           'Content-Type':  'application/json',
           'HTTP-Referer':  cfg.SITE_URL || 'https://booksversusmovies.com',
           'X-Title':       'BooksVersusMovies Page Generator',
@@ -427,9 +397,9 @@ async function callOpenRouter(cfg, prompt, apiKey) {
 }
 
 // ------------------------------------------------------------------ //
-// PROCESS ONE ROW
+// PROCESS ONE ROW — returns true on success, false on error
 // ------------------------------------------------------------------ //
-async function processRow(cfg, promptTemplate, resolvedCSV, resolvedOutput, row, index, apiKey, dryRun) {
+async function processRow(cfg, promptTemplate, resolvedCSV, resolvedOutput, row, index, dryRun) {
   const outputPath = path.join(resolvedOutput, `${row.slug}.html`);
 
   log(`\nRow ${index} — "${row.title}"`);
@@ -452,7 +422,7 @@ async function processRow(cfg, promptTemplate, resolvedCSV, resolvedOutput, row,
   if (!thumbOk) {
     const errMsg = `Thumbnail missing for YouTube ID "${ytId}"`;
     logError(errMsg);
-    writeStatus(resolvedCSV, row.slug, `ERROR: ${errMsg}`, cfg.MODEL);
+    writeStatus(resolvedCSV, row.slug, `ERROR:${errMsg}`, cfg.MODEL);
     return false;
   }
 
@@ -461,10 +431,10 @@ async function processRow(cfg, promptTemplate, resolvedCSV, resolvedOutput, row,
   const startTotal = Date.now();
   let html;
   try {
-    html = await callOpenRouter(cfg, buildPrompt(promptTemplate, row), apiKey);
+    html = await callOpenRouter(cfg, buildPrompt(promptTemplate, row));
   } catch (err) {
     logError(`API call failed: ${err.message}`);
-    writeStatus(resolvedCSV, row.slug, `ERROR: ${err.message.replace(/\n/g, ' ')}`, cfg.MODEL);
+    writeStatus(resolvedCSV, row.slug, `ERROR:${err.message.replace(/\n/g, ' ')}`, cfg.MODEL);
     return false;
   }
 
@@ -475,7 +445,7 @@ async function processRow(cfg, promptTemplate, resolvedCSV, resolvedOutput, row,
     const debugPath = path.join(scriptDir, 'debug.txt');
     fs.writeFileSync(debugPath, html, 'utf8');
     logError(`Raw response saved to: ${debugPath}`);
-    writeStatus(resolvedCSV, row.slug, `ERROR: ${errMsg}`, cfg.MODEL);
+    writeStatus(resolvedCSV, row.slug, `ERROR:${errMsg}`, cfg.MODEL);
     return false;
   }
 
@@ -485,7 +455,7 @@ async function processRow(cfg, promptTemplate, resolvedCSV, resolvedOutput, row,
   const sizeKb   = (html.length / 1024).toFixed(1);
 
   log(`SUCCESS — ${outputPath} (${sizeKb} KB, ${totalSec}s)`);
-  writeStatus(resolvedCSV, row.slug, 'PROCESSED', cfg.MODEL);
+  writeStatus(resolvedCSV, row.slug, 'SUCCESS', cfg.MODEL);
   return true;
 }
 
@@ -499,33 +469,30 @@ async function main() {
   const rowArgIdx   = args.indexOf('--row');
   const specificRow = rowArgIdx !== -1 ? parseInt(args[rowArgIdx + 1], 10) : null;
 
+  const cfgPath = path.join(scriptDir, 'movies.cfg');
   logSection(dryRun ? 'DRY RUN' : 'GENERATE PAGE');
 
-  // Load config from ../config/movies.cfg
-  const cfg = loadConfig(cfgPath);
-  log(`Config: ${cfgPath}`);
-  log(`Model: ${cfg.MODEL}`);
-
-  // Get API key from environment (loaded from ../config/.env)
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  if (!apiKey) {
-    logError('OPENROUTER_API_KEY not found in environment.');
-    logError(`Please create ${envPath} with: OPENROUTER_API_KEY=sk-or-v1-...`);
-    process.exit(1);
-  }
-
+  // Load config
+  const cfg     = loadConfig(cfgPath);
   const allRows = forceAll || (cfg.ALL_ROWS || '').toLowerCase() === 'true';
+  log(`Config: ${cfgPath}`);
   log(`Mode: ${allRows ? 'ALL unbuilt rows' : 'single next row'}`);
 
-  // Resolve paths relative to project root (automation/)
-  const resolvePath = (p) => path.isAbsolute(p) ? p : path.join(projectRoot, p);
-
-  const promptPath   = resolvePath(cfg.PROMPT_FILE);
+  // Resolve prompt path
+  const promptPath = path.isAbsolute(cfg.PROMPT_FILE)
+    ? cfg.PROMPT_FILE
+    : path.join(scriptDir, cfg.PROMPT_FILE);
   const promptTemplate = loadPrompt(promptPath);
   log(`Prompt: ${promptPath}`);
 
-  const resolvedCSV   = resolvePath(cfg.SPREADSHEET_PATH);
-  const resolvedOutput = resolvePath(cfg.OUTPUT_DIR);
+  // Resolve CSV and output paths
+  const resolvedCSV = path.isAbsolute(cfg.SPREADSHEET_PATH)
+    ? cfg.SPREADSHEET_PATH
+    : path.join(process.cwd(), cfg.SPREADSHEET_PATH);
+
+  const resolvedOutput = path.isAbsolute(cfg.OUTPUT_DIR)
+    ? cfg.OUTPUT_DIR
+    : path.join(process.cwd(), cfg.OUTPUT_DIR);
 
   if (!fs.existsSync(resolvedOutput)) {
     fs.mkdirSync(resolvedOutput, { recursive: true });
@@ -533,56 +500,38 @@ async function main() {
   }
 
   // Load CSV
-  const { headers, rows } = parseCSV(resolvedCSV);
+  const { rows } = parseCSV(resolvedCSV);
   log(`CSV loaded: ${rows.length} rows from ${resolvedCSV}`);
+  log(`Model: ${cfg.MODEL}`);
   log(`Output: ${resolvedOutput}`);
-
-  // Ensure status column exists (add if missing)
-  if (!headers.includes('status')) {
-    log(`Adding 'status' column to CSV (missing)`);
-    // We'll add it via writeStatus later, but we need to update headers in memory
-    headers.push('status');
-    // Rewrite CSV with new header
-    const escapeField = (val) => {
-      const s = String(val || '');
-      return s.includes(',') || s.includes('"') || s.includes('\n')
-        ? `"${s.replace(/"/g, '""')}"`
-        : s;
-    };
-    const newLines = [headers.map(escapeField).join(',')];
-    for (const row of rows) {
-      newLines.push(headers.map(h => escapeField(row[h] || '')).join(','));
-    }
-    fs.writeFileSync(resolvedCSV, newLines.join('\n') + '\n', 'utf8');
-    log(`CSV updated with status column.`);
-  }
 
   // ── SINGLE ROW MODE ──────────────────────────────────────────────
   if (!allRows) {
     const result = findNextRow(rows, resolvedOutput, specificRow);
     if (!result) {
-      log('No rows with blank or pending status found — nothing to do.');
+      log('All rows are already built or skipped — nothing to do.');
       return;
     }
-    await processRow(cfg, promptTemplate, resolvedCSV, resolvedOutput, result.row, result.index, apiKey, dryRun);
+    await processRow(cfg, promptTemplate, resolvedCSV, resolvedOutput, result.row, result.index, dryRun);
     return;
   }
 
   // ── ALL ROWS MODE ────────────────────────────────────────────────
-  let built = 0, errors = 0;
+  let built = 0, errors = 0, skipped = 0;
 
-  // We need to re-parse CSV each iteration to get updated statuses
   for (let i = 0; i < rows.length; i++) {
-    const { rows: freshRows, headers: freshHeaders } = parseCSV(resolvedCSV);
+    // Re-parse CSV each iteration so status changes from previous rows are picked up
+    const { rows: freshRows } = parseCSV(resolvedCSV);
     const result = findNextRow(freshRows, resolvedOutput, null);
-    if (!result) break;
 
-    const ok = await processRow(cfg, promptTemplate, resolvedCSV, resolvedOutput, result.row, result.index, apiKey, dryRun);
+    if (!result) break; // nothing left to process
+
+    const ok = await processRow(cfg, promptTemplate, resolvedCSV, resolvedOutput, result.row, result.index, dryRun);
     if (ok) built++; else errors++;
   }
 
   logSection(`RUN COMPLETE`);
-  log(`Processed: ${built}  |  Errors: ${errors}`);
+  log(`Built: ${built}  |  Errors: ${errors}  |  Skipped: ${skipped}`);
   log(`Log: ${LOG_FILE}`);
 }
 

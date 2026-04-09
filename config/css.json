@@ -1,0 +1,27 @@
+{
+  "paths": {
+    "promptTemplate": "prompts/css.txt",
+    "outputCss": "style.css",
+    "logsDir": "logs"
+  },
+  "agents": {
+    "grok": {
+      "model": "anthropic/claude-sonnet-4.6",
+      "maxTokens": 4000,
+      "temperature": 0.5
+    },
+    "deepseek": {
+      "model": "anthropic/claude-sonnet-4.6",
+      "maxTokens": 4000,
+      "temperature": 0.5
+    },
+    "claude": {
+      "model": "anthropic/claude-sonnet-4.6",
+      "maxTokens": 6000,
+      "temperature": 0.3
+    }
+  },
+  "api": {
+    "timeoutSeconds": 180
+  }
+}

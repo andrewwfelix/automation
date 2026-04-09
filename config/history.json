@@ -1,0 +1,39 @@
+{
+  "paths": {
+    "promptTemplate": "prompts/informative.txt",
+    "stagedDir": "data/staged",
+    "finalDir": "data/final",
+    "logsDir": "logs"
+  },
+  "agents": {
+    "grok": {
+      "model": "x-ai/grok-4.1-fast",
+      "maxTokens": 8000,
+      "temperature": 0.7
+    },
+    "deepseek": {
+      "model": "deepseek/deepseek-v3.2",
+      "maxTokens": 8000,
+      "temperature": 0.7
+    },
+    "claude": {
+      "model": "x-ai/grok-4.1-fast",
+      "maxTokens": 12000,
+      "temperature": 0.2
+    }
+  },
+  "page": {
+    "title": "The History of Metal Detecting – From Military Origins to Modern Treasure Hunting",
+    "slug": "history-of-metal-detecting",
+    "keywords": "history of metal detecting, who invented metal detector, metal detector history timeline",
+    "targetAudience": "hobbyists and history enthusiasts",
+    "numProducts": 0,
+    "includeBuyingGuide": false,
+    "includeComparisonTable": false,
+    "sections": []
+  },
+  "api": {
+    "siteUrl": "https://metaldetectingguide.com",
+    "timeoutSeconds": 180
+  }
+}

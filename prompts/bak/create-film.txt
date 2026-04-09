@@ -1,0 +1,82 @@
+You are an expert content writer and front-end developer. Generate a complete HTML page for a book vs movie comparison, following the exact structure, styling, and section order of the example below.
+
+## Required HTML Schema (from dune.html)
+
+Copy the structure below exactly. Replace all content (titles, descriptions, differences, FAQ, etc.) with information specific to the film/book requested. Keep all CSS classes, IDs, and layout identical. Only change the text content and image paths.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dune Book vs Movie: Key Differences & Should You Read First</title>
+  <meta name="description" content="Frank Herbert's 1965 novel vs Denis Villeneuve's 2021–2024 films — Paul's interiority, Chani's skepticism, and the Bene Gesserit's manipulation.">
+  <meta name="last-updated" content="2025-01-15">
+  <link rel="stylesheet" href="css/style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P0DY0XDWVV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P0DY0XDWVV');
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "name": "Dune: Book vs Movie",
+    "reviewBody": "Villeneuve's adaptation is one of the best science fiction films ever made — and it still can't do what Herbert does. The book is an argument about power and prophecy the films can only gesture toward.",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "5",
+      "bestRating": "5",
+      "worstRating": "3"
+    },
+    "author": { "@type": "Organization", "name": "BooksVersusMovies.com" },
+    "itemReviewed": {
+      "@type": "Book",
+      "name": "Dune",
+      "author": { "@type": "Person", "name": "Frank Herbert" },
+      "datePublished": "1965"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is the Dune movie faithful to the book?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Villeneuve's films are remarkably faithful to the plot and world of Herbert's novel, but they soften the book's most uncomfortable elements. Paul's complicity in manipulating the Fremen is less explicit, and the full horror of his prescient visions is muted. The films are reverent adaptations that preserve the story's architecture while adjusting its moral weight."
+        }
+      }
+      // ... more FAQ items
+    ]
+  }
+  </script>
+  <style>
+    /* All CSS from dune.html – keep exactly as is */
+    .char-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+    .char-table thead { background: #f0ebe0; }
+    .char-table th { padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #c8973a; }
+    .char-table td { padding: 0.75rem; border-bottom: 1px solid #e0d9cc; vertical-align: top; }
+    .char-name { font-weight: 600; color: #2c2416; }
+    .char-actor { font-size: 0.85rem; color: #6b6456; }
+    .faq-list { margin: 1.5rem 0; }
+    .faq-item { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e0d9cc; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q { font-weight: 600; font-size: 1.05rem; color: #2c2416; margin-bottom: 0.5rem; }
+    .faq-a { color: #4a4540; line-height: 1.6; }
+    /* Include all other styles from dune.html (header, footer, meta-strip, etc.) */
+  </style>
+</head>
+<body>
+  <!-- Header, hero, comparison panels, meta strip, body text, spoiler warning, character table, key differences, should you read first, FAQ, verdict, related section, footer -->
+  <!-- Keep all HTML tags and class names identical to dune.html -->
+</body>
+</html>

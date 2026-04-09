@@ -1,0 +1,41 @@
+Top 20 SEO Tenants for Web Pages
+
+1. Unique, descriptive title tags – 50-60 characters, primary keyword near front, entices clicks.
+
+2. Meta descriptions that drive CTR – 120-158 characters, include keyword and value proposition.
+
+3. One H1 per page – clearly states page topic, closely matches title tag.
+
+4. Logical heading hierarchy (H2, H3, H4) – outlines content structure; search engines use headings to understand context.
+
+5. Keyword-focused, natural content – target 1 primary + 2-3 secondary keywords; use in first 100 words, headings, and naturally throughout.
+
+6. High-quality, original content – substantially different from other pages; avoid thin affiliate pages (under 500 words).
+
+7. Internal linking – link to your own relevant pages with descriptive anchor text; distributes link equity.
+
+8. External links to authoritative sources – link to reputable, relevant sites (e.g., Wikipedia, industry authorities).
+
+9. Image optimization – descriptive file names, alt text that describes the image (include keyword naturally), compressed file size.
+
+10. Page load speed – under 2-3 seconds; optimize images, use caching, minimize render-blocking resources.
+
+11. Mobile responsiveness – fully functional and readable on all device sizes; Google uses mobile-first indexing.
+
+12. Clear, crawlable site structure – no more than 3 clicks from homepage to any page; use logical folders (e.g., /books/, /detectors/).
+
+13. XML sitemap – submit to Google Search Console; includes all important pages, updated when you add content.
+
+14. Robots.txt – properly configured to allow crawling of your key pages and block low-value pages (e.g., thank-you pages).
+
+15. HTTPS/SSL – secure connection; Google gives a slight ranking boost and users trust it.
+
+16. Breadcrumb navigation – helps users and search engines understand page hierarchy; can appear as rich snippets.
+
+17. Schema markup (structured data) – use relevant types (e.g., Product, Book, Article, ItemList) to enable rich results.
+
+18. Unique, valuable content for each page – no duplicate or near-duplicate pages; consolidate similar topics with canonical tags if necessary.
+
+19. User engagement signals – low bounce rate, high time on page, clicks through to other pages. Achieved via compelling content and internal links.
+
+20. Regular content updates – refresh outdated information, add new sections, update publication dates. Signals freshness to search engines.

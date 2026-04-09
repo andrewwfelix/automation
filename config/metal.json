@@ -1,0 +1,38 @@
+{
+  "paths": {
+    "promptTemplate": "prompts/metal.txt",
+    "stagedDir": "data/staged",
+    "finalDir": "data/final",
+    "logsDir": "logs"
+  },
+  "agents": {
+    "grok": {
+      "model": "x-ai/grok-4.1-fast",
+      "maxTokens": 8000,
+      "temperature": 0.7
+    },
+    "deepseek": {
+      "model": "deepseek/deepseek-v3.2",
+      "maxTokens": 8000,
+      "temperature": 0.7
+    },
+    "claude": {
+      "model": "anthropic/claude-opus-4.6",
+      "maxTokens": 12000,
+      "temperature": 0.2
+    }
+  },
+  "page": {
+    "title": "Best Metal Detectors for Relics & Coins 2026 – Deep Seeking & Iron Separation",
+    "targetAudience": "relic hunters, coin shooters, and history enthusiasts",
+    "keywords": "best metal detector for relics and coins, coin shooting detector, relic hunting metal detector, deep seeking detector, iron separation metal detector",
+    "numProducts": 6,
+    "includeBuyingGuide": true,
+    "includeComparisonTable": true,
+    "sections": []
+  },
+  "api": {
+    "siteUrl": "https://metaldetectingguide.com",
+    "timeoutSeconds": 180
+  }
+}

@@ -1,0 +1,207 @@
+CRITICAL INSTRUCTION: Your response must be a single valid HTML document. Start your response with <!DOCTYPE html> and end it with </html>. Do not include any text, explanation, preamble, or markdown before or after the HTML. Do not wrap the HTML in code fences. Your entire response is the HTML file and nothing else.
+
+TOKEN LIMIT: Generate an HTML file of approximately 6000–8000 tokens. Do NOT truncate. Ensure the full document is complete. If you cannot finish within the limit, output a comment at the top: <!-- TRUNCATED: increase token limit --> and still try to complete as much as possible.
+
+DATA VALIDATION: Use the placeholder values exactly as provided. Do not substitute default movie titles (e.g., do not write "Mickey 17" if {{TITLE}} contains something else). If any critical placeholder (TITLE, AUTHOR, GENRE) is empty or contains "PLACEHOLDER" or "TBA", stop and output an HTML comment: <!-- ERROR: Missing required data for {{TITLE}} --> and then exit.
+
+You are writing a book-vs-film comparison page for BooksVersusMovies.com.
+
+BOOK DETAILS:
+- Title: {{TITLE}}
+- Author: {{AUTHOR}}
+- Genre: {{GENRE}}
+- Book published: {{BOOK_YEAR}}
+- Director/Creator: {{DIRECTOR}}
+- Film/Series year: {{FILM_YEAR}}
+- Verdict: {{VERDICT}}
+- Affiliate link: {{AFFILIATE_LINK}}
+- Trailer URL: {{TRAILER_URL}}
+- YouTube video ID: {{YOUTUBE_ID}}
+- Book image filename: {{IMAGE}}
+- Slug: {{SLUG}}
+- Media type: {{MEDIA_LABEL}} (e.g., "Film" or "TV Series")
+- Verdict badge class: {{VERDICT_CLASS}}
+- Video affiliate link (optional): {{VIDEO_AFFILIATE_LINK}}
+- Starring line: {{STARRING_LINE}}
+- Story brief (2-3 paragraphs): {{STORY_BRIEF}}
+- Difference 1 title & body: {{DIFF_1_TITLE}} / {{DIFF_1_BODY}}
+- Difference 2 title & body: {{DIFF_2_TITLE}} / {{DIFF_2_BODY}}
+- Difference 3 title & body: {{DIFF_3_TITLE}} / {{DIFF_3_BODY}}
+- Difference 4 title & body: {{DIFF_4_TITLE}} / {{DIFF_4_BODY}}
+- Difference 5 title & body: {{DIFF_5_TITLE}} / {{DIFF_5_BODY}}
+- Should You Read First text: {{READ_FIRST}}
+- Verdict box text: {{VERDICT_TEXT}}
+- Meta description (150 chars max): {{META_DESC}}
+- Review body (one sentence): {{REVIEW_BODY}}
+- Rating (4 or 5): {{RATING}}
+- Related cards (exactly 3): {{RELATED_1_SLUG}} → {{RELATED_1_TITLE}}, {{RELATED_2_SLUG}} → {{RELATED_2_TITLE}}, {{RELATED_3_SLUG}} → {{RELATED_3_TITLE}}
+
+OUTPUT: A complete, valid HTML file. Return ONLY the HTML — no markdown fences, no explanation.
+
+TEMPLATE TO FOLLOW EXACTLY (replace placeholders, do not change structure):
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}}: Book vs {{MEDIA_LABEL}} — Key Differences &amp; Should You Read First?</title>
+  <meta name="description" content="{{META_DESC}}">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "name": "{{TITLE}}: Book vs {{MEDIA_LABEL}}",
+    "reviewBody": "{{REVIEW_BODY}}",
+    "reviewRating": { "@type": "Rating", "ratingValue": "{{RATING}}", "bestRating": "5", "worstRating": "3" },
+    "author": { "@type": "Organization", "name": "BooksVersusMovies.com" },
+    "itemReviewed": {
+      "@type": "Book",
+      "name": "{{TITLE}}",
+      "author": { "@type": "Person", "name": "{{AUTHOR}}" },
+      "datePublished": "{{BOOK_YEAR}}"
+    }
+  }
+  </script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P0DY0XDWVV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P0DY0XDWVV');
+  </script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="site-logo" href="/">Books<span>Versus</span>Movies</a>
+    <nav><a href="/">Home</a> &nbsp;&middot;&nbsp; <a href="/index_alt.html">Browse All</a> &nbsp;&middot;&nbsp; <a href="/about.html">About</a></nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="genre-tag">{{GENRE}}</div>
+  <h1>{{TITLE}}</h1>
+  <p class="subtitle">Book ({{BOOK_YEAR}}) vs. {{MEDIA_LABEL}} ({{FILM_YEAR}}) &mdash; dir. {{DIRECTOR}}</p>
+</div>
+
+<div class="page-wrap">
+  <div class="comparison">
+    <div class="panel-book">
+      <div class="panel-label">The Book</div>
+      <a class="book-cover-link" href="{{AFFILIATE_LINK}}" target="_blank" rel="noopener sponsored">
+        <img class="book-cover" src="./images/{{IMAGE}}" alt="{{TITLE}} book cover {{AUTHOR}} {{BOOK_YEAR}}" loading="lazy">
+      </a>
+      <a class="buy-btn" href="{{AFFILIATE_LINK}}" target="_blank" rel="noopener sponsored">Buy the Book &rarr;</a>
+      <p class="affiliate-disclosure">As an Amazon Associate I earn from qualifying purchases.</p>
+    </div>
+    <div class="panel-film">
+      <div class="panel-label">The {{MEDIA_LABEL}}</div>
+      <!-- Trailer block: only output if YouTube ID is provided and not empty/placeholder -->
+      {{#if YOUTUBE_ID}}
+      <a class="trailer-link" href="{{TRAILER_URL}}" target="_blank" rel="noopener">
+        <div class="trailer-thumbnail">
+          <img src="https://img.youtube.com/vi/{{YOUTUBE_ID}}/maxresdefault.jpg" alt="{{TITLE}} {{FILM_YEAR}} official trailer">
+          <div class="trailer-play">&#9658;</div>
+        </div>
+      </a>
+      {{else}}
+        {{#if VIDEO_AFFILIATE_LINK}}
+        <a class="buy-video-btn" href="{{VIDEO_AFFILIATE_LINK}}" target="_blank" rel="noopener sponsored">Buy or Rent &rarr;</a>
+        <p class="affiliate-disclosure">As an Amazon Associate I earn from qualifying purchases.</p>
+        {{/if}}
+      {{/if}}
+      <p class="trailer-note">{{STARRING_LINE}}</p>
+    </div>
+  </div>
+
+  <div class="meta-strip">
+    <div class="meta-item"><strong>Author</strong>{{AUTHOR}}</div>
+    <div class="meta-item"><strong>Book Published</strong>{{BOOK_YEAR}}</div>
+    <div class="meta-item"><strong>{{MEDIA_LABEL}} Released</strong>{{FILM_YEAR}}</div>
+    <div class="meta-item"><strong>Director</strong>{{DIRECTOR}}</div>
+    <span class="verdict-badge {{VERDICT_CLASS}}">{{VERDICT}}</span>
+  </div>
+
+  <div class="body-text">
+    <h2>The Story in Brief</h2>
+    <p>{{STORY_BRIEF}}</p>
+
+    <h2>Key Differences</h2>
+
+    <div class="difference">
+      <h3>{{DIFF_1_TITLE}}</h3>
+      <p>{{DIFF_1_BODY}}</p>
+    </div>
+
+    <div class="difference">
+      <h3>{{DIFF_2_TITLE}}</h3>
+      <p>{{DIFF_2_BODY}}</p>
+    </div>
+
+    <div class="difference">
+      <h3>{{DIFF_3_TITLE}}</h3>
+      <p>{{DIFF_3_BODY}}</p>
+    </div>
+
+    <div class="difference">
+      <h3>{{DIFF_4_TITLE}}</h3>
+      <p>{{DIFF_4_BODY}}</p>
+    </div>
+
+    <div class="difference">
+      <h3>{{DIFF_5_TITLE}}</h3>
+      <p>{{DIFF_5_BODY}}</p>
+    </div>
+
+    <h2>Should You Read First?</h2>
+    <p>{{READ_FIRST}}</p>
+
+    <div class="verdict-box">
+      <div class="verdict-title">Verdict</div>
+      <p>{{VERDICT_TEXT}}</p>
+    </div>
+  </div>
+
+  <div class="related-section">
+    <h3>More Comparisons</h3>
+    <div class="related-grid">
+      <a class="related-card" href="/{{RELATED_1_SLUG}}.html"><span class="rel-label">Also Compare</span>{{RELATED_1_TITLE}}</a>
+      <a class="related-card" href="/{{RELATED_2_SLUG}}.html"><span class="rel-label">Also Compare</span>{{RELATED_2_TITLE}}</a>
+      <a class="related-card" href="/{{RELATED_3_SLUG}}.html"><span class="rel-label">Also Compare</span>{{RELATED_3_TITLE}}</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 BooksVersusMovies.com &nbsp;&mdash;&nbsp; <a href="/">Home</a> &nbsp;&middot;&nbsp; <a href="about.html">About</a></p>
+  <p style="margin-top:0.5rem;font-size:0.75rem;color:#444;">As an Amazon Associate I earn from qualifying purchases.</p>
+</footer>
+</body>
+</html>
+
+WRITING RULES:
+- Voice: precise, opinionated, no hedging. Write like a knowledgeable critic, not a book report.
+- Each difference section: 200-300 words. Name specific characters, scenes, actors, techniques. Compare directly.
+- Story in brief: 2-3 paragraphs. Specific about plot and context. End with the adaptation's significance.
+- Verdict honours the given verdict ({{VERDICT}}). If Book Wins, the book genuinely wins. If Too Close to Call, acknowledge both sides equally.
+- Should You Read First: 2 paragraphs with a clear, specific recommendation.
+- META_DESC: 150 characters max. Include author, year, director/stars, 2-3 key themes.
+- REVIEW_BODY: one punchy sentence summarising the verdict.
+- RATING: 5 if Too Close to Call or Book Wins strongly, 4 if Book Wins but the adaptation is decent.
+- STARRING_LINE: e.g. "Starring Viola Davis, Emma Stone &mdash; Film: 2011"
+- Related cards: use exactly the three provided slugs and titles. Do not invent new ones.
+- Do NOT use HTML entities for apostrophes in body text — use ' directly
+- Use &mdash; for em dashes in HTML, &amp; for ampersands inside HTML attributes
+
+CONDITIONAL BLOCK RULES:
+- Output the YouTube trailer block only if {{YOUTUBE_ID}} is provided and not empty and not equal to "PLACEHOLDER".
+- If {{YOUTUBE_ID}} is missing/empty/placeholder, but {{VIDEO_AFFILIATE_LINK}} is provided and not empty/placeholder, output the "Buy or Rent" button block.
+- If neither is provided, output nothing in that space (just the .panel-film div with only .panel-label and .trailer-note).
+- Do not include any placeholder text like "PLACEHOLDER" or "TRAILER URL" in the final HTML. If a value is missing, omit the entire element that depends on it.
+
+FINAL REMINDER: Begin your response immediately with <!DOCTYPE html> and end it with </html>. Nothing before, nothing after. The entire response is the raw HTML file.

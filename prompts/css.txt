@@ -1,0 +1,33 @@
+text
+You are the world's best CSS specialist with years of experience, you have worked for the NY Times and vogue magazine, and many of the world's most beautiful sites. 
+
+TASK: Generate a complete, self-contained CSS stylesheet for the HTML document provided below.
+
+REQUIREMENTS:
+- Output ONLY valid CSS code. Do not include any explanatory text, markdown formatting (except code blocks if needed), or HTML.
+- Use semantic class names and avoid excessive nesting.
+- Support both light and dark color schemes using CSS variables and the `prefers-color-scheme` media query.
+- Ensure the design is fully responsive (mobile-first approach) 
+- The CSS must work with the existing HTML classes and IDs (e.g., .product, .breadcrumb, .comparison-table, .guide-container, .detector-table, .affiliate-link, .last-updated, etc.).
+- Style the following components beautifully:
+  * Typography (headings, body text, links)
+  * Breadcrumb navigation
+  * Product cards (hover effects, borders, spacing)
+  * Image placeholders (styled as dashed boxes or background gradients – assume images will be added later)
+  * Affiliate buttons (call-to-action styling, hover state)
+  * Comparison table (responsive with horizontal scroll on small screens, striped rows, sticky header optional)
+  * Buying guide sections (bulleted lists, subheadings)
+  * Footer / guide-footer
+
+- Ensure all interactive elements have visible focus states for accessibility.
+- Avoid inline styles or JavaScript.
+
+
+OUTPUT FORMAT:
+```css
+/* === CSS STARTS HERE === */
+[your CSS code]
+/* === CSS ENDS HERE === */
+--- START OF HTML DOCUMENT (TEMPLATE) ---
+
+<!DOCTYPE html><html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Metal Detector Guide – Template</title> </head> <body> <nav aria-label="Breadcrumb" class="breadcrumb-nav"> <ol class="breadcrumb"> <li><a href="/">Home</a></li> <li><a href="/guides/">Buying Guides</a></li> <li aria-current="page">Current Page</li> </ol> </nav> <main class="guide-container"> <header class="guide-header"> <h1>Main Heading Here</h1> <p class="last-updated">Last updated: March 2026</p> </header> <section class="intro"> <p>Introductory paragraph with <strong>keywords</strong> and <a href="/internal-link.html">internal link example</a>.</p> </section> <section class="product-list" id="top-picks"> <h2>Top Products</h2> <article class="product" id="product-1"> <h3>1. Product Name</h3> [IMAGE: product-name.jpg] <p>Description text with key features. Best for coins, relics, gold, or beach.</p> <p class="affiliate-link"><a href="[AFFILIATE: product-name]">Check price on Amazon</a></p> </article> <article class="product" id="product-2"> <h3>2. Another Product</h3> [IMAGE: another-product.jpg] <p>Brief description focusing on unique selling point.</p> <p class="affiliate-link"><a href="[AFFILIATE: another-product]">Check price on Amazon</a></p> </article> </section> <section class="buying-guide"> <h2>Buying Guide</h2> <h3>VLF vs PI Technology</h3> <p>Explanation with <a href="https://en.wikipedia.org/wiki/Metal_detector" target="_blank" rel="noopener">external link</a>.</p> <h3>Frequency & Multi-Frequency</h3> <p>Details here.</p> <h3>Ground Balancing</h3> <p>Details here.</p> <h3>Weight & Ergonomics</h3> <p>Details here.</p> <h3>Budget Tiers</h3> <ul> <li><strong>Under $400</strong> – Entry level</li> <li><strong>$400–$800</strong> – Mid-range</li> <li><strong>$800+</strong> – Premium</li> </ul> </section> <section class="comparison-table"> <h2>Comparison Table</h2> <div class="table-wrapper"> <table class="detector-table"> <thead> <tr><th>Model</th><th>Best For</th><th>Frequency</th><th>Weight</th><th>Price Range</th></tr> </thead> <tbody> <tr><td>Example Model</td><td>All-terrain</td><td>Multi</td><td>2.9 lbs</td><td>$1,000+</td></tr> <tr><td>Another Model</td><td>Beach</td><td>Single</td><td>3.2 lbs</td><td>$600</td></tr> </tbody> </table> </div> </section> <footer class="guide-footer"> <p>Footer text with <a href="/guides/beginners.html">internal link</a>.</p> </footer> </main> </body> </html> --- END OF HTML DOCUMENT --- ```

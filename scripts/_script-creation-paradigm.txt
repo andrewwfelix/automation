@@ -1,0 +1,177 @@
+BooksVersusMovies Automation
+============================
+
+This folder contains automation scripts for generating and revising book-vs-movie comparison pages for BooksVersusMovies.com.
+
+All scripts follow a consistent paradigm:
+
+- Configuration -> JSON files inside ./config/ (named after the script, e.g. create-film.json, revise-all.json)
+- Secrets -> .env file inside ./config/ (only OPENROUTER_API_KEY is required)
+- Prompts -> Text files inside ./prompts/ (e.g. create-film.txt, revise-all.txt)
+- Input / Output -> HTML files read from ./data/input/ and written to ./data/final/
+- API -> OpenRouter (supports many models, e.g. anthropic/claude-sonnet-4-5)
+- Logging -> Console output + log files in ./logs/ (for batch operations)
+
+
+Folder Structure
+----------------
+
+automation/
+├── config/                      # all JSON configs and secrets
+│   ├── .env                     # OPENROUTER_API_KEY=...
+│   ├── create-film.json
+│   └── revise-all.json
+├── prompts/                     # system & user prompts (text files)
+│   ├── create-film.txt          # template for generating new pages
+│   └── revise-all.txt           # instruction for revising existing pages
+├── scripts/                     # executable Node.js scripts
+│   ├── create-film.js
+│   └── revise-all.js
+├── data/
+│   ├── input/                   # source HTML files (for revise-all)
+│   └── final/                   # generated / revised output
+└── logs/                        # batch run logs (revise-all only)
+
+
+Scripts Overview
+----------------
+
+1. create-film.js – Generate a New Comparison Page
+
+   Purpose: Create a brand-new HTML page for a film that does not yet have a comparison.
+   Uses a prompt template that includes the full HTML schema (based on dune.html).
+
+   Usage:
+     node scripts/create-film.js <slug> <affiliate-link> <youtube-url>
+
+   Example:
+     node scripts/create-film.js "mickey-17" "https://amzn.to/4sYfgP3" "https://youtube.com/watch?v=osYpGSz_0i4"
+
+   What it does:
+     - Reads configuration from config/create-film.json.
+     - Loads the prompt template from prompts/create-film.txt.
+     - Replaces {film_name}, {affiliate_link}, {youtube_trailer_url} in the prompt.
+     - Calls OpenRouter (model defined in the JSON config).
+     - Strips markdown code fences and extracts the HTML.
+     - Saves the file as data/final/<slug>.html.
+
+2. revise-all.js – Batch Revision of Existing Pages
+
+   Purpose: Read all HTML files from data/input/, send each to OpenRouter with a revision prompt, and write revised HTML directly to data/final/. Preserves original affiliate links.
+
+   Usage:
+     node scripts/revise-all.js                              # default config
+     node scripts/revise-all.js --config custom-config.json
+     node scripts/revise-all.js --dry-run
+     node scripts/revise-all.js --file atonement.html
+
+   What it does:
+     - Loads config from config/revise-all.json (or custom path).
+     - Scans data/input/ for .html files.
+     - For each file, reads the revision prompt (prompts/revise-all.txt) and sends original HTML + instructions to OpenRouter.
+     - Optionally strips and restores Amazon affiliate links to avoid contamination.
+     - Saves revised files to data/final/; failed originals are copied to data/final/failures/.
+     - Logs progress to console and to logs/revise-all.log.
+
+
+Configuration Files (JSON)
+--------------------------
+
+Both scripts expect a JSON config file with the same base name as the script, located in ./config/.
+
+Example config/create-film.json:
+
+{
+  "paths": {
+    "revisePrompt": "prompts/create-film.txt",
+    "finalDir": "data/final"
+  },
+  "mainRevision": {
+    "model": "anthropic/claude-sonnet-4-5",
+    "maxTokens": 22000,
+    "timeoutSeconds": 180,
+    "temperature": 0.1,
+    "stripAffiliateLinks": false
+  },
+  "api": {
+    "siteUrl": "https://booksversusmovies.com"
+  }
+}
+
+Example config/revise-all.json (similar but can have different prompt path):
+
+{
+  "paths": {
+    "revisePrompt": "prompts/revise-all.txt",
+    "inputDir": "data/input",
+    "finalDir": "data/final"
+  },
+  "mainRevision": {
+    "model": "anthropic/claude-sonnet-4-5",
+    "maxTokens": 22000,
+    "timeoutSeconds": 180,
+    "temperature": 0.1,
+    "stripAffiliateLinks": true
+  },
+  "api": {
+    "siteUrl": "https://booksversusmovies.com"
+  }
+}
+
+
+Environment Variables
+---------------------
+
+Create a file config/.env with the following content:
+
+OPENROUTER_API_KEY=your-actual-api-key-here
+
+No other environment variables are required. The scripts load this file automatically using dotenv.
+
+
+Prompt Templates (Plain Text)
+-----------------------------
+
+Prompts are stored as .txt files in ./prompts/. They can contain any instructions, but for HTML generation they must ask for raw HTML output.
+
+create-film.txt should include the full HTML schema (like dune.html) as an example, with placeholders {film_name}, {affiliate_link}, {youtube_trailer_url}. The script replaces these placeholders before sending to the API.
+
+revise-all.txt contains instructions for improving or correcting existing HTML pages. It receives the original HTML appended at the end of the prompt.
+
+
+Logging
+-------
+
+- create-film.js logs only to the console (timestamps included).
+- revise-all.js logs to both console and logs/revise-all.log. It also creates a failures directory inside data/final/ to preserve originals that failed revision.
+
+
+Common Workflows
+----------------
+
+1. Generate a new page:
+   - Create/update prompts/create-film.txt with the desired HTML schema.
+   - Run create-film.js with slug, affiliate link, and YouTube URL.
+   - The output goes to data/final/<slug>.html.
+
+2. Revise an existing page:
+   - Place the original HTML file in data/input/.
+   - (Optional) Edit prompts/revise-all.txt with specific revision instructions.
+   - Run revise-all.js (with or without --file).
+   - The revised file appears in data/final/ with the same name.
+
+3. Test a revision without writing files:
+   - Use revise-all.js --dry-run.
+
+4. Revise only one file:
+   - revise-all.js --file atonement.html
+
+
+Notes
+-----
+
+- All scripts assume they are run from the project root (the folder containing config/, scripts/, data/, etc.).
+- The scripts use axios for HTTP requests and dotenv for loading .env.
+- Affiliate link stripping/restoration works only for amazon.com and amzn.to links.
+- The API key must have access to the model specified in the config file.
+- Timeouts are configurable; default is 180 seconds.
